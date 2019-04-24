@@ -11,12 +11,15 @@
           <b-nav-item to="/about">เกี่ยวกับเรา</b-nav-item>
         </b-navbar-nav>
 
-        <b-navbar-nav class="ml-auto">
-          <b-nav-item-dropdown text="John" class="nav-profile-btn" right>
+        <b-navbar-nav class="ml-auto right-nav">
+          <b-nav-item to="product/add">เพิ่มสินค้า</b-nav-item>
+
+          <b-nav-item-dropdown text="พงศธร" class="nav-profile-btn" right>
             <!-- <template slot="button-content" class="nav-profile-button">
               User
             </template> -->
             <b-dropdown-item href="#" :to="'/sign-in'">Sign In</b-dropdown-item>
+            <b-dropdown-item href="#" :to="'/register'">Register</b-dropdown-item>
             <b-dropdown-item href="#">Profile</b-dropdown-item>
             <b-dropdown-item href="#">Sign Out</b-dropdown-item>
           </b-nav-item-dropdown>
@@ -56,16 +59,22 @@
   line-height: 1.1em;
 }
 
+.main-navbar .right-nav .nav-link{
+  margin-top: 0.3em;
+}
+
 .main-navbar .nav-profile-btn{
   background: #ffffff;
   color: #000000;
   padding: 5px;
   border-radius: 30px;
+  margin-left: 10px;
 }
 
 .main-navbar .nav-profile-btn .nav-link{
   color: #000000 !important;
   font-weight: 500;
+  margin-top: 0px;
 }
 </style>
 
