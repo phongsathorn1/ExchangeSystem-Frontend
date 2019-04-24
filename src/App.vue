@@ -24,6 +24,8 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   background: #ffffff;
   min-height: 100vh;
+  font-family: 'Athiti', sans-serif;
+  font-size: 1.02em;
 }
 
 </style>

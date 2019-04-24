@@ -46,7 +46,7 @@ export default {
           ]
         },
         {
-          'id': 1,
+          'id': 2,
           'title': 'ชื่อสินค้า',
           'wantItem': 'อยากได้..',
           'quatity': '2',
@@ -55,7 +55,7 @@ export default {
           ]
         },
         {
-          'id': 1,
+          'id': 3,
           'title': 'ชื่อสินค้า',
           'wantItem': 'อยากได้..',
           'quatity': '2',
@@ -64,7 +64,7 @@ export default {
           ]
         },
         {
-          'id': 1,
+          'id': 4,
           'title': 'ชื่อสินค้า',
           'wantItem': 'อยากได้..',
           'quatity': '2',

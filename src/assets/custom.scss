@@ -2,4 +2,20 @@
 @import 'node_modules/bootstrap-vue/src/index.scss';
 
 $primary-color: #5D1049;
+$primary-light-color: #80286d;
+$secondary-color: #ffd54f;
 $navbar-font-color: #FFFFFF;
+
+.default-btn{
+    background: $primary-color;
+}
+
+.default-btn:hover,
+.default-btn:active{
+    background: $primary-light-color !important;
+    border-color: $primary-light-color !important;
+}
+
+.default-btn:focus{
+    box-shadow: 0 0 0 0.2rem rgba($color: $primary-color, $alpha: 0.5) !important;
+}

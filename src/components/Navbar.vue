@@ -16,6 +16,7 @@
             <!-- <template slot="button-content" class="nav-profile-button">
               User
             </template> -->
+            <b-dropdown-item href="#" :to="'/sign-in'">Sign In</b-dropdown-item>
             <b-dropdown-item href="#">Profile</b-dropdown-item>
             <b-dropdown-item href="#">Sign Out</b-dropdown-item>
           </b-nav-item-dropdown>
@@ -39,7 +40,7 @@
 }
 
 .main-navbar .container{
-  border-bottom: 1px solid #80286d;
+  border-bottom: 1px solid $primary-light-color;
   padding-bottom: 15px;
 }
 

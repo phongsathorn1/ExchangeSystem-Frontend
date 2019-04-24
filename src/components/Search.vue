@@ -29,7 +29,7 @@
           </b-form-group>
         </b-col>
         <b-col md="2">
-          <b-button type="submit" class="search-btn">Search</b-button>
+          <b-button type="submit" class="search-btn">ค้นหา</b-button>
         </b-col>
       </b-row>
     </b-form>
@@ -45,7 +45,7 @@ export default {
         category: null
       },
       categories: [
-        { text: "Select Category...", value: null },
+        { text: "ทั้งหมด", value: null },
         "รูปภาพ",
         "เข็มกลัด",
         "แท่งไฟ"
@@ -57,13 +57,15 @@ export default {
 
 
 <style lang="scss">
+@import "@/assets/custom.scss";
+
 .search-container {
   padding: 30px 20px;
 }
 
 .search-container input,
 .search-container select{
-  background-color: #80286d;
+  background-color: $primary-light-color;
   border: none;
   color: #FFFFFF;
   font-size: 1.1em;
@@ -89,7 +91,7 @@ export default {
   width: 100%;
   color: #FFFFFF;
   background: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 4 5'%3e%3cpath fill='%23ffffff' d='M2 0L0 2h4zm0 5L0 3h4z'/%3e%3c/svg%3e") no-repeat right 0.75rem center/8px 10px;
-  background-color: #80286d;
+  background-color: $primary-light-color;
 }
 
 .search-input:focus {
