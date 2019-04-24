@@ -1,18 +1,20 @@
 <template>
-    <b-col md="3" class="wrapper-product-item">
-        <div class="product-item">
-            <div class="product-image">
-                <img :src=product.images[0]>
+    <router-link :to="{name: 'product', params: {id: product.id}}" class="col-md-3 wrapper-product-item">
+        <!-- <b-col md="12" class="wrapper-product-item"> -->
+            <div class="product-item">
+                <div class="product-image">
+                    <img :src=product.images[0]>
+                </div>
+                <div class="product-detail">
+                    <a href="javascript:void(0)" class="product-title">
+                        <h3>{{product.title}}</h3>
+                    </a>
+                    <span>สิ่งที่ต้องการ</span> {{product.wantItem}}<br>
+                    <span>จำนวนที่มี</span> {{product.quatity}}
+                </div>
             </div>
-            <div class="product-detail">
-                <a href="javascript:void(0)" class="product-title">
-                    <h3>{{product.title}}</h3>
-                </a>
-                <span>สิ่งที่ต้องการ</span> {{product.wantItem}}<br>
-                <span>จำนวนที่มี</span> {{product.quatity}}
-            </div>
-        </div>
-    </b-col>
+        <!-- </b-col> -->
+    </router-link>
 </template>
 
 <script>
@@ -37,6 +39,11 @@ export default {
 .product-item .product-image img{
     height: 100%;
     width: auto;
+}
+
+a.wrapper-product-item{
+    text-decoration: none;
+    color: #000000;
 }
 
 .product-item img{
