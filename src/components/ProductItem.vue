@@ -24,15 +24,20 @@ export default {
 
 <style lang="scss" scoped>
 .product-item{
-    border: 2px solid #E0E0E0;
+    // border: 2px solid #E0E0E0;
     background: #FFFFFF;
     padding: 30px;
 }
 
 .product-item .product-image{
-    border-bottom: 1px solid #E0E0E0;
     margin-bottom: 20px;
-    padding-bottom: 10px;
+    height: 200px;
+    text-align: center;
+}
+
+.product-item .product-image img{
+    height: 100%;
+    width: auto;
 }
 
 .product-item img{
@@ -42,5 +47,16 @@ export default {
 .product-item .product-title h3{
     font-size: 18px;
     font-weight: bold;
+}
+
+.wrapper-product-item{
+    cursor: pointer;
+    border-radius: 5px;
+    transition: all 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+.wrapper-product-item:hover{
+    box-shadow: 0px 3px 12px rgba(0, 0, 0, 0.27);
+    transform: scale(1.02, 1.02);
 }
 </style>
