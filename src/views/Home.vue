@@ -80,23 +80,4 @@ export default {
 
 <style lang="scss">
 @import "@/assets/custom.scss";
-// #home{
-//   margin-top: 30px;
-// }
-
-.header{
-  padding-bottom: 2em;
-  background: $primary-color;
-  margin-bottom: 30px;
-  font-family: 'Athiti', sans-serif;
-}
-
-.wrapper-container{
-  background: #ffffff;
-  border-radius: 20px 20px 0px 0px;
-  position: relative;
-  bottom: 60px;
-  padding-top: 20px;
-  padding-bottom: 20px;
-}
 </style>

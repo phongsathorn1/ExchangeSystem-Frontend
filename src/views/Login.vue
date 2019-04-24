@@ -31,6 +31,6 @@ export default {
 }
 
 .inner-signin-container{
-    padding: 8em 0em;
+    padding-top: 8em;
 }
 </style>

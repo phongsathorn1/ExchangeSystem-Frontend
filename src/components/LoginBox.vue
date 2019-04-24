@@ -1,5 +1,5 @@
 <template>
-  <div class="login-card">
+  <div class="card-a">
     <b-form>
       <h1>เข้าสู่ระบบ</h1>
       <b-form-group
@@ -46,18 +46,5 @@ export default {
 <style lang="scss" scoped>
 @import "@/assets/custom.scss";
 
-.login-card {
-  padding: 20px;
-  background: #ffffff;
-  border-radius: 5px;
-}
 
-.login-card h1 {
-  font-size: 1.9em;
-  color: $primary-light-color;
-}
-
-.login-card input.form-control{
-    border: 2px solid $primary-color;
-}
 </style>
