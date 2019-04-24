@@ -1,21 +1,56 @@
-@import 'node_modules/bootstrap/scss/bootstrap';
-@import 'node_modules/bootstrap-vue/src/index.scss';
+@import "node_modules/bootstrap/scss/bootstrap";
+@import "node_modules/bootstrap-vue/src/index.scss";
 
-$primary-color: #5D1049;
+$primary-color: #5d1049;
 $primary-light-color: #80286d;
 $secondary-color: #ffd54f;
-$navbar-font-color: #FFFFFF;
+$navbar-font-color: #ffffff;
 
-.default-btn{
-    background: $primary-color;
+.default-btn {
+  background: $primary-color;
+}
+
+select {
+  border: 2px solid $primary-color !important;
 }
 
 .default-btn:hover,
-.default-btn:active{
-    background: $primary-light-color !important;
-    border-color: $primary-light-color !important;
+.default-btn:active {
+  background: $primary-light-color !important;
+  border-color: $primary-light-color !important;
 }
 
-.default-btn:focus{
-    box-shadow: 0 0 0 0.2rem rgba($color: $primary-color, $alpha: 0.5) !important;
+.default-btn:focus {
+  box-shadow: 0 0 0 0.2rem rgba($color: $primary-color, $alpha: 0.5) !important;
+}
+
+.card-a {
+  padding: 20px;
+  background: #ffffff;
+  border-radius: 5px;
+}
+
+.card-a h1 {
+  font-size: 1.9em;
+  color: $primary-light-color;
+}
+
+.card-a input.form-control {
+  border: 2px solid $primary-color;
+}
+
+.header {
+  padding-bottom: 2em;
+  background: $primary-color;
+  margin-bottom: 30px;
+  font-family: "Athiti", sans-serif;
+}
+
+.wrapper-container {
+  background: #ffffff;
+  border-radius: 20px 20px 0px 0px;
+  position: relative;
+  bottom: 60px;
+  padding-top: 20px;
+  padding-bottom: 20px;
 }
