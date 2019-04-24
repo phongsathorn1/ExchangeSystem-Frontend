@@ -12,7 +12,7 @@
         </b-navbar-nav>
 
         <b-navbar-nav class="ml-auto right-nav">
-          <b-nav-item to="product/add">เพิ่มสินค้า</b-nav-item>
+          <b-nav-item to="/product/add">เพิ่มสินค้า</b-nav-item>
 
           <b-nav-item-dropdown text="พงศธร" class="nav-profile-btn" right>
             <!-- <template slot="button-content" class="nav-profile-button">
