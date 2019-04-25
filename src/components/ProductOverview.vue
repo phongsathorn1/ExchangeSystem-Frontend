@@ -7,7 +7,7 @@
         <div class="product-meta">
           <b-row>
             <div class="product-status">
-                <span class="product-notready product-status-flag">พร้อมให้ยื่นข้อเสนอ</span>
+                <span class="product-ready product-status-flag">พร้อมให้ยื่นข้อเสนอ</span>
             </div>
           </b-row>
           <b-row>
