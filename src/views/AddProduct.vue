@@ -12,12 +12,11 @@
           <div class="add-product-form" v-if="!previewMode">
             <form @submit.prevent="onSubmit">
               <b-row>
-                <b-col md="5"></b-col>
-                <b-col md="7">
+                <b-col md="12">
                   <b-form-group>
                     <b-form-input
                       v-model="form.title"
-                      placeholder="ชื่อสินค้า"
+                      placeholder="ชื่อสินค้า..."
                       class="product-title"
                     ></b-form-input>
                   </b-form-group>
@@ -62,6 +61,18 @@
                 </b-col>
               </b-row>
               <b-row>
+                <b-col md="12">
+                  <h3>รูปภาพสินค้า</h3>
+                  <b-form-group>
+                    <vue-dropzone
+                      class="image-upload"
+                      id="image-upload"
+                      :options="imageUploadOption"
+                    ></vue-dropzone>
+                  </b-form-group>
+                </b-col>
+              </b-row>
+              <b-row>
                 <b-col md="12" class="text-right">
                   <b-button type="submit" variant="primary">เพิ่มสินค้า</b-button>
                 </b-col>
@@ -99,12 +110,16 @@
 
 <script>
 import { VueEditor } from "vue2-editor";
+import vue2Dropzone from "vue2-dropzone";
+import "vue2-dropzone/dist/vue2Dropzone.min.css";
+
 import ProductOverview from "@/components/ProductOverview.vue";
 
 export default {
   components: {
     VueEditor,
-    ProductOverview
+    ProductOverview,
+    vueDropzone: vue2Dropzone
   },
   data() {
     return {
@@ -129,6 +144,18 @@ export default {
           ["blockquote", "align", "direction", "code-block"],
           ["image", "video"]
         ]
+      },
+      imageUploadOption: {
+        url: "https://httpbin.org/post",
+        acceptedFiles: "image/*",
+        thumbnailMethod: "contain",
+        addRemoveLinks: true,
+        thumbnailHeight: '300',
+        thumbnailWidth: null,
+        dictDefaultMessage: "คลิกหรือลากไฟล์มาที่นี่เพื่ออัพโหลดรูปภาพ",
+        dictCancelUpload: "หยุดอัพโหลด",
+        dictCancelUploadConfirmation: "คุณแน่ใจแล้วใช่หรือไม่ที่จะหยุดอัพโหลดรูปภาพนี้",
+        dictRemoveFile: "ลบรูปภาพ"
       },
       previewMode: false
     };
@@ -176,4 +203,25 @@ export default {
   font-weight: 600;
   margin-bottom: 15px;
 }
+
+.image-upload {
+  font-family: "Athiti", sans-serif;
+  font-weight: 600;
+  font-size: 1.1em;
+}
 </style>
+
+<style lang="scss">
+@import "@/assets/custom.scss";
+
+.image-upload .dz-preview {
+  box-shadow: 0px 4px 9px rgba($color: #000000, $alpha: 0.6);
+  border-radius: 5px;
+  overflow: hidden;
+}
+
+.image-upload>.dz-preview .dz-details {
+    background-color: rgba($color: $primary-light-color, $alpha: 0.6);
+}
+</style>
+
