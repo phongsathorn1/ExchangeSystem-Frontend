@@ -15,7 +15,7 @@
         </b-col>
         <b-col sm="6">
             <b-form-group id="input-group-2" label="เพศ" label-for="gender">
-                <b-form-select id="input-3" v-model="form.gender" :options="gender" required></b-form-select>
+                <b-form-select id="input-3" v-model="form.gender" :options="gender" class="primary-select" required></b-form-select>
             </b-form-group>
         </b-col>
         <b-col sm="6">
