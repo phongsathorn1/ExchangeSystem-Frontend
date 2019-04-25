@@ -1,8 +1,179 @@
 <template>
-    
+  <div id="add-product">
+    <div class="header">
+      <b-container>
+        <h1>เพิ่มสินค้า</h1>
+      </b-container>
+    </div>
+    <div class="wrapper-container">
+      <b-container>
+        <div class="product-detail">
+          <!--- Start add product form --->
+          <div class="add-product-form" v-if="!previewMode">
+            <form @submit.prevent="onSubmit">
+              <b-row>
+                <b-col md="5"></b-col>
+                <b-col md="7">
+                  <b-form-group>
+                    <b-form-input
+                      v-model="form.title"
+                      placeholder="ชื่อสินค้า"
+                      class="product-title"
+                    ></b-form-input>
+                  </b-form-group>
+
+                  <div class="product-meta">
+                    <b-row>
+                      <b-col md="6">
+                        <b-form-group id="input-group-1" label="หมวดหมู่:" label-for="category">
+                          <b-form-select
+                            v-model="form.category"
+                            :options="categories"
+                            id="category"
+                          ></b-form-select>
+                        </b-form-group>
+                      </b-col>
+                      <b-col md="6">
+                        <b-form-group id="input-group-1" label="จำนวน:" label-for="quantity">
+                          <b-form-input type="number" v-model="form.quantity" id="quantity" min="1"></b-form-input>
+                        </b-form-group>
+                      </b-col>
+                    </b-row>
+                    <b-row>
+                      <b-col>
+                        <b-form-group
+                          id="input-group-1"
+                          label="สิ่งที่อยากได้:"
+                          label-for="wantItem"
+                        >
+                          <b-form-input type="text" v-model="form.wantItem" id="wantItem"></b-form-input>
+                        </b-form-group>
+                      </b-col>
+                    </b-row>
+                  </div>
+                </b-col>
+              </b-row>
+              <b-row>
+                <b-col md="12">
+                  <h3>รายละเอียดของสินค้า</h3>
+                  <b-form-group>
+                    <vue-editor v-model="form.detail" :editorToolbar="editor.customToolbar"></vue-editor>
+                  </b-form-group>
+                </b-col>
+              </b-row>
+              <b-row>
+                <b-col md="12" class="text-right">
+                  <b-button type="submit" variant="primary">เพิ่มสินค้า</b-button>
+                </b-col>
+              </b-row>
+            </form>
+          </div>
+          <!--- end add product form --->
+          <!--- Start add product preview form --->
+          <div class="product-form-review" v-else>
+            <div class="info">โปรดตรวจสอบความถูกต้องของข้อมูลด้านล่างนี้...</div>
+            <product-overview
+              :title="form.title"
+              :category="form.category"
+              :quantity="form.quantity"
+              :detail="form.detail"
+              :wantItem="form.wantItem"
+            ></product-overview>
+            <!--- end add product preview form --->
+            <!--- start add product preview control --->
+            <b-row>
+              <b-col cols="6">
+                <b-button @click="onClickBack">กลับไปแก้ไข</b-button>
+              </b-col>
+              <b-col cols="6" class="text-right">
+                <b-button @click="onConfirmSubmit" variant="primary">ยืนยัน</b-button>
+              </b-col>
+            </b-row>
+          </div>
+          <!--- end add product preview control --->
+        </div>
+      </b-container>
+    </div>
+  </div>
 </template>
 
-<style lang="scss">
+<script>
+import { VueEditor } from "vue2-editor";
+import ProductOverview from "@/components/ProductOverview.vue";
+
+export default {
+  components: {
+    VueEditor,
+    ProductOverview
+  },
+  data() {
+    return {
+      form: {
+        title: "",
+        category: null,
+        quantity: 1,
+        wantItem: "",
+        detail: ""
+      },
+      categories: [
+        { text: "เลือกหมวดหมู่", value: null },
+        "รูปภาพ",
+        "เข็มกลัด",
+        "แท่งไฟ"
+      ],
+      editor: {
+        customToolbar: [
+          ["bold", "italic", "underline", "strike", "link"],
+          [{ header: 1 }, { header: 2 }],
+          [{ list: "ordered" }, { list: "bullet" }],
+          ["blockquote", "align", "direction", "code-block"],
+          ["image", "video"]
+        ]
+      },
+      previewMode: false
+    };
+  },
+  methods: {
+    onSubmit() {
+      this.previewMode = true;
+    },
+    onClickBack() {
+      this.previewMode = false;
+    },
+    onConfirmSubmit() {
+      this.$router.push("/");
+    }
+  }
+};
+</script>
+
+<style lang="scss" scoped>
 @import "@/assets/custom.scss";
 
+.add-product-form {
+  border: 2px dashed $primary-light-color;
+  padding: 20px;
+}
+
+.add-product-form .product-title {
+  font-size: 2em;
+  color: $primary-color;
+  font-weight: 500;
+}
+
+.add-product-form .product-title::placeholder {
+  color: $primary-light-color;
+}
+
+.add-product-form h3 {
+  font-size: 1.6em;
+  color: $primary-color;
+}
+
+.product-form-review .info {
+  background: $primary-light-color2;
+  padding: 10px;
+  font-weight: 600;
+  margin-bottom: 15px;
+}
 </style>

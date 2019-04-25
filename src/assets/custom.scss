@@ -3,6 +3,7 @@
 
 $primary-color: #5d1049;
 $primary-light-color: #80286d;
+$primary-light-color2: #e0bfd8;
 $secondary-color: #ffd54f;
 $navbar-font-color: #ffffff;
 
@@ -10,7 +11,7 @@ $navbar-font-color: #ffffff;
   background: $primary-color;
 }
 
-select {
+.primary-select select {
   border: 2px solid $primary-color !important;
 }
 
@@ -53,4 +54,9 @@ select {
   bottom: 60px;
   padding-top: 20px;
   padding-bottom: 20px;
+}
+
+.header h1{
+  color: #ffffff;
+  padding: 0.5em 0;
 }
