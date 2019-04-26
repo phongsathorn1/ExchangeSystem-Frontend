@@ -1,5 +1,5 @@
 <template>
-  <div class="card-a">
+  <div class="card-a login-box">
     <b-form>
       <h1>เข้าสู่ระบบ</h1>
       <b-form-group
@@ -46,5 +46,7 @@ export default {
 <style lang="scss" scoped>
 @import "@/assets/custom.scss";
 
-
+.login-box{
+  box-shadow: 0px 6px 13px 1px rgba($color: #000000, $alpha: 0.3);
+}
 </style>
