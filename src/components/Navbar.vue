@@ -18,9 +18,9 @@
             <!-- <template slot="button-content" class="nav-profile-button">
               User
             </template> -->
-            <b-dropdown-item href="#" :to="'/sign-in'">Sign In</b-dropdown-item>
-            <b-dropdown-item href="#" :to="'/register'">Register</b-dropdown-item>
-            <b-dropdown-item href="#">Profile</b-dropdown-item>
+            <b-dropdown-item :to="'/sign-in'">Sign In</b-dropdown-item>
+            <b-dropdown-item :to="'/register'">Register</b-dropdown-item>
+            <b-dropdown-item :to="'/profile'">Profile</b-dropdown-item>
             <b-dropdown-item href="#">Sign Out</b-dropdown-item>
           </b-nav-item-dropdown>
         </b-navbar-nav>

@@ -6,6 +6,7 @@ import Login from './views/Login.vue'
 import Register from './views/Register'
 import Product from './views/Product.vue'
 import AddProduct from './views/AddProduct.vue'
+import Profile from './views/Profile.vue'
 
 Vue.use(Router)
 
@@ -45,6 +46,11 @@ export default new Router({
       path: '/product/:id',
       name: 'product',
       component: Product
+    },
+    {
+      path: '/profile',
+      name: 'profile',
+      component: Profile
     }
   ]
 })
