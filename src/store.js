@@ -42,9 +42,11 @@ export default new Vuex.Store({
       let token = localStorage.getItem('user_token')
       commit('setUserToken', token)
     },
-    async loadUser ({ commit }) {
-      let response = await Vue.prototype.$axios.get('/user/me/')
-      commit('setUser', response.data)
+    async loadUser ({ commit, state }) {
+      if (state.userToken != null) {
+        let response = await Vue.prototype.$axios.get('/user/me/')
+        commit('setUser', response.data)
+      }
     },
     logOut ({ commit }) {
       commit('removeToken')
