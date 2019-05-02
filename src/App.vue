@@ -24,14 +24,6 @@ export default {
       'loadUserToken',
       'loadUser'
     ])
-    // async loadUser(){
-    //   try {
-    //     let response = await this.$axios.get('/user/me/')
-    //     this.$store.commit('setUser', response.data)
-    //   } catch(error) {
-    //     console.log(error.response)
-    //   }
-    // }
   },
   computed: {
     ...mapGetters({
