@@ -8,7 +8,7 @@
 
 <script>
 import Navbar from '@/components/Navbar.vue'
-import { mapGetters } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 import axios from 'axios'
 
 export default {
@@ -16,19 +16,20 @@ export default {
     Navbar
   },
   created() {
-    if(this.userToken != null){
-      this.loadUser()
-    }
+    this.loadUser()
   },
   methods: {
-    async loadUser(){
-      try {
-        let response = await this.$axios.get('/user/me/')
-        this.$store.commit('setUser', response.data)
-      } catch(error) {
-        console.log(error.response)
-      }
-    }
+    ...mapActions([
+      'loadUser'
+    ])
+    // async loadUser(){
+    //   try {
+    //     let response = await this.$axios.get('/user/me/')
+    //     this.$store.commit('setUser', response.data)
+    //   } catch(error) {
+    //     console.log(error.response)
+    //   }
+    // }
   },
   computed: {
     ...mapGetters({

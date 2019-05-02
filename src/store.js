@@ -2,11 +2,11 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import axios from 'axios'
 
-const myaxios = axios.create({
-  baseURL: 'http://localhost:8000/'
-})
+// const myaxios = axios.create({
+//   baseURL: 'http://localhost:8000/'
+// })
 
-myaxios.defaults.headers.common['Authorization'] = `Bearer ${localStorage.getItem('user_token')}`
+// myaxios.defaults.headers.common['Authorization'] = `Bearer ${localStorage.getItem('user_token')}`
 
 Vue.use(Vuex)
 
@@ -43,7 +43,7 @@ export default new Vuex.Store({
       commit('setUserToken', token)
     },
     async loadUser ({ commit }) {
-      let response = await myaxios.get('/user/me/')
+      let response = await Vue.prototype.$axios.get('/user/me/')
       commit('setUser', response.data)
     },
     logOut ({ commit }) {

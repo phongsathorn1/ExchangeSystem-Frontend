@@ -30,7 +30,7 @@ export default {
     ]),
     async onSubmit(event) {
       event.preventDefault();
-      let response = await axios.post("http://localhost:8000/user/auth/", {
+      let response = await this.$axios.post("/user/auth/", {
         email: this.email,
         password: this.password
       });
