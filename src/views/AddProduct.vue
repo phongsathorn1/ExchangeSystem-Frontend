@@ -142,6 +142,7 @@ export default {
       },
       imageUploadOption: {
         url: "http://localhost:8000/upload/product/",
+        
         acceptedFiles: "image/*",
         thumbnailMethod: "contain",
         addRemoveLinks: true,
