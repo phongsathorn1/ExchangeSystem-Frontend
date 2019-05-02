@@ -13,7 +13,7 @@
           <b-row>
             <b-col sm="6">
               <b>หมวดหมู่</b>
-              ​ {{ category }}
+              ​ {{ category.name }}
             </b-col>
             <b-col sm="6">
               <b>จำนวนที่มี</b>

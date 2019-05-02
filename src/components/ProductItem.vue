@@ -2,14 +2,15 @@
     <router-link :to="{name: 'product', params: {id: product.id}}" class="col-md-3 wrapper-product-item">
         <div class="product-item">
             <div class="product-image">
-                <img :src=product.images[0]>
+                <!-- <img :src=product.images[0]> -->
+                <img src="https://images-na.ssl-images-amazon.com/images/G/01/amazonglobal/images/Fuji/Dash/2019/January/mShoes_2X._CB455678051_SY520_.jpg">
             </div>
             <div class="product-detail">
                 <a href="javascript:void(0)" class="product-title">
-                    <h3>{{product.title}}</h3>
+                    <h3>{{product.name}}</h3>
                 </a>
-                <span>สิ่งที่ต้องการ</span> {{product.wantItem}}<br>
-                <span>จำนวนที่มี</span> {{product.quatity}}
+                <span>สิ่งที่ต้องการ</span> {{product.want_product}}<br>
+                <span>จำนวนที่มี</span> {{product.quantity}}
             </div>
         </div>
     </router-link>

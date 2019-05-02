@@ -9,12 +9,13 @@
     </div>
     <div class="wrapper-container">
       <b-container>
+        <!-- {{ route.params.id }} -->
         <product-overview
-          :title="product.title"
+          :title="product.name"
           :category="product.category"
           :quantity="product.quantity"
           :detail="product.detail"
-          :wantItem="product.wantItem"
+          :wantItem="product.want_product"
         ></product-overview>
       </b-container>
     </div>
@@ -27,6 +28,7 @@ import Search from "@/components/Search.vue";
 import ProductOverview from "@/components/ProductOverview.vue";
 
 export default {
+  props: ['id'],
   name: "product",
   components: {
     ProductItem,
@@ -36,18 +38,33 @@ export default {
   data: () => {
     return {
       product: {
-        id: 1,
-        title: "ชื่อสินค้า",
-        wantItem: "อยากได้..",
-        quantity: "2",
-        category: "รูปภาพ",
-        detail:
-          "เยนโปรดิวเซอร์ ไฟลต์มินท์ เซอร์ไพรส์อีสเตอร์อีสเตอร์ ม็อบ เที่ยงวันซินโดรมหล่อฮังก้วยติวเพทนาการ เมคอัพพาสเจอร์ไรส์เดอะวีเจไฮไลต์ เซาท์ความหมาย พฤหัสสตรอว์เบอร์รีถูกต้องไฮกุโซลาร์ เพียวแพ็คแซวมอยส์เจอไรเซอร์ไฮเอนด์ กีวีเคลมมาร์จินแม่ค้าเต๊ะ ฮอตพ่อค้า โดนัทสเตริโอวิภัชภาคนอร์ท ทัวร์นาเมนท์อิ่มแปร้ไดเอ็ตวิดีโอ วอล์กอัลบั้ม วาซาบิ ไคลแมกซ์",
-        images: [
-          "https://images-na.ssl-images-amazon.com/images/G/01/amazonglobal/images/Fuji/Dash/2019/January/mShoes_2X._CB455678051_SY520_.jpg"
-        ]
+        category: {
+          id: '',
+          name: ''
+        },
+        detail: '',
+        id: '',
+        name: '',
+        owner: '',
+        quantity: '',
+        url: '',
+        want_product: ''
       }
     };
+  },
+  mounted(){
+    this.getProduct()
+  },
+  methods: {
+    async getProduct() {
+      try {
+        let response = await this.$axios.get(`/product/${this.$route.params.id}/`)
+        this.product = response.data
+        console.log(response.data)
+      } catch(error) {
+        console.log(error)
+      }
+    }
   }
 };
 </script>

@@ -130,12 +130,7 @@ export default {
         wantItem: "",
         detail: ""
       },
-      categories: [
-        { text: "เลือกหมวดหมู่", value: null },
-        "รูปภาพ",
-        "เข็มกลัด",
-        "แท่งไฟ"
-      ],
+      categories: [],
       editor: {
         customToolbar: [
           ["bold", "italic", "underline", "strike", "link"],
@@ -160,6 +155,9 @@ export default {
       previewMode: false
     };
   },
+  created() {
+    this.getCategories()
+  },
   methods: {
     onSubmit() {
       this.previewMode = true;
@@ -168,7 +166,46 @@ export default {
       this.previewMode = false;
     },
     onConfirmSubmit() {
-      this.$router.push("/");
+      this.submitProduct()
+      // this.$router.push("/");
+    },
+    async getCategories() {
+      try {
+        let response = await this.$axios.get('/category/')
+        let categories = [{
+          text: 'เลือกหมวดหมู่สินค้า',
+          value: null
+        }]
+        
+        response.data.results.forEach(category => {
+          categories.push({
+            text: category.name,
+            value: category.id
+          })
+        });
+
+        this.categories = categories
+
+      } catch(error) {
+        console.log(error)
+      }
+    },
+    async submitProduct() {
+      try {
+        let response = await this.$axios.post('/product/', {
+          name: this.form.title,
+          category_id: this.form.category,
+          detail: this.form.detail,
+          quantity: this.form.quantity,
+          want_product: this.form.wantItem
+        })
+
+        console.log(response.data)
+        this.$router.push({name: 'product', params: {id: response.data.id}})
+
+      } catch(error) {
+        console.log(error.response)
+      }
     }
   }
 };
