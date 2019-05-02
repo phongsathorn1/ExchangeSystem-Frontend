@@ -141,7 +141,7 @@ export default {
         ]
       },
       imageUploadOption: {
-        url: "https://httpbin.org/post",
+        url: "http://localhost:8000/upload/product/",
         acceptedFiles: "image/*",
         thumbnailMethod: "contain",
         addRemoveLinks: true,
