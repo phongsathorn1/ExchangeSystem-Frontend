@@ -11,7 +11,7 @@
       <b-container>
         <b-row>
           <product-item
-          v-for="product in products"
+          v-for="product in products.lists"
           :product=product
           :key="product.id">
           </product-item>
@@ -22,8 +22,6 @@
 </template>
 
 <script>
-// @ is an alias to /src
-// import HelloWorld from '@/components/HelloWorld.vue'
 import ProductItem from '@/components/ProductItem.vue'
 import Search from '@/components/Search.vue'
 
@@ -35,44 +33,25 @@ export default {
   },
   data: () => {
     return {
-      products: [
-        {
-          'id': 1,
-          'title': 'ชื่อสินค้า',
-          'wantItem': 'อยากได้..',
-          'quatity': '2',
-          'images': [
-            'https://images-na.ssl-images-amazon.com/images/G/01/amazonglobal/images/Fuji/Dash/2019/January/mShoes_2X._CB455678051_SY520_.jpg'
-          ]
-        },
-        {
-          'id': 2,
-          'title': 'ชื่อสินค้า',
-          'wantItem': 'อยากได้..',
-          'quatity': '2',
-          'images': [
-            'https://images-na.ssl-images-amazon.com/images/G/01/amazonglobal/images/Fuji/Dash/2019/January/W_Dresses_2X._CB455677607_SY520_.jpg'
-          ]
-        },
-        {
-          'id': 3,
-          'title': 'ชื่อสินค้า',
-          'wantItem': 'อยากได้..',
-          'quatity': '2',
-          'images': [
-            'https://images-na.ssl-images-amazon.com/images/I/51I%2BteGzpCL._AC_SY400_.jpg'
-          ]
-        },
-        {
-          'id': 4,
-          'title': 'ชื่อสินค้า',
-          'wantItem': 'อยากได้..',
-          'quatity': '2',
-          'images': [
-            'https://images-na.ssl-images-amazon.com/images/I/51Ox7m6-OIL._AC_SY400_.jpg'
-          ]
-        }
-      ]
+      products: {
+        next: null,
+        previous: null,
+        lists: []
+      },
+      
+    }
+  },
+  created(){
+    this.getProducts()
+  },
+  methods: {
+    async getProducts(){
+      let response = await this.$axios.get('/product/')
+      this.products.lists = response.data.results
+      this.products.next = response.data.next
+      this.products.previous = response.data.previous
+
+      console.log(response.data)
     }
   }
 }
