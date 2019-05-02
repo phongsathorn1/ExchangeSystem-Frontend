@@ -1,23 +1,23 @@
 <template>
   <div class="card-a login-box">
-    <b-form>
+    <b-form @submit="onSubmit">
       <h1>เข้าสู่ระบบ</h1>
       <b-form-group
         id="input-group-1"
-        label="ชื่อผู้ใช้ (Username)"
-        label-for="username"
+        label="อีเมลล์ (Email)"
+        label-for="email"
       >
         <b-form-input
-          id="username"
-          v-model="username"
-          type="text"
+          id="email"
+          v-model="email"
+          type="email"
           required
         ></b-form-input>
       </b-form-group>
       <b-form-group
         id="input-group-2"
         label="รหัสผ่าน"
-        label-for="username"
+        label-for="password"
       >
         <b-form-input
           id="password"
@@ -32,12 +32,22 @@
 </template>
 
 <script>
+import axios from 'axios'
+
 export default {
     data(){
         return {
-            username: '',
+            email: '',
             password: ''
         }
+    },
+    methods:{
+      async onSubmit(event){
+        event.preventDefault()
+        let response = await axios.post('http://localhost:8000/user/auth/', {email: this.email, password: this.password})
+        console.log(response.data.token)
+        this.$store.commit('setUserToken', response.data.token)
+      }
     }
 }
 </script>
