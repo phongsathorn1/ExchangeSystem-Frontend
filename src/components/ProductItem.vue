@@ -25,7 +25,6 @@ export default {
 
 <style lang="scss" scoped>
 .product-item{
-    background: #FFFFFF;
     padding: 30px;
 }
 
