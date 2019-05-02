@@ -36,7 +36,7 @@ export default {
     },
     methods: {
         onRegisterSubmit(){
-            this.step++
+            // this.step++
         }
     }
 }
