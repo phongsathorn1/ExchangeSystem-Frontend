@@ -136,7 +136,12 @@ export default {
         password_confirmation: "",
         firebase_uid: ""
       },
-      gender: [{ text: "กรุณาระบุเพศ", value: null }, "ชาย", "หญิง", "อื่นๆ"],
+      gender: [
+          { text: "กรุณาระบุเพศ", value: null }, 
+          { text: "ชาย", value: 'F' }, 
+          { text: "หญิง", value: 'M' }, 
+          { text: "อื่นๆ", value: 'X' }, 
+        ],
       showOTP: false
     };
   },
