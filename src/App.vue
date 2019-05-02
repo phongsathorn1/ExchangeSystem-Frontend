@@ -16,10 +16,12 @@ export default {
     Navbar
   },
   created() {
+    this.loadUserToken()
     this.loadUser()
   },
   methods: {
     ...mapActions([
+      'loadUserToken',
       'loadUser'
     ])
     // async loadUser(){
