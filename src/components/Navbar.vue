@@ -14,15 +14,16 @@
         <b-navbar-nav class="ml-auto right-nav">
           <b-nav-item to="/product/add">เพิ่มสินค้า</b-nav-item>
 
-          <b-nav-item-dropdown text="พงศธร" class="nav-profile-btn" right>
-            <!-- <template slot="button-content" class="nav-profile-button">
-              User
-            </template> -->
+          <b-nav-item-dropdown v-if='user != null' :text="user.first_name" class="nav-profile-btn" right>
+            <b-dropdown-item :to="'/profile'">Profile</b-dropdown-item>
+            <b-dropdown-item href="#" @click='signOut'>Sign Out</b-dropdown-item>
+          </b-nav-item-dropdown>
+
+          <b-nav-item-dropdown v-else text="เข้าสู่ระบบ" class="nav-profile-btn" right>
             <b-dropdown-item :to="'/sign-in'">Sign In</b-dropdown-item>
             <b-dropdown-item :to="'/register'">Register</b-dropdown-item>
-            <b-dropdown-item :to="'/profile'">Profile</b-dropdown-item>
-            <b-dropdown-item href="#">Sign Out</b-dropdown-item>
           </b-nav-item-dropdown>
+
         </b-navbar-nav>
       </b-collapse>
     </b-container>
@@ -30,8 +31,24 @@
 </template>
 
 <script>
+import { mapGetters, mapActions } from 'vuex'
+
 export default {
-  
+
+  computed: {
+    ...mapGetters({
+      user: 'getUser'
+    })
+  },
+  methods: {
+    ...mapActions({
+      logOut: 'logOut'
+    }),
+    signOut(){
+      this.logOut()
+      this.$router.push({name: 'home'})
+    }
+  }
 }
 </script>
 

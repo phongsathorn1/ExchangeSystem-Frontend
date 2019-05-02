@@ -109,6 +109,7 @@
 <script>
 import firebase from "firebase";
 import axios from "axios";
+import { constants } from "crypto";
 
 const config = {
   apiKey: "AIzaSyBLLAHvo386Ip9lsyyzmv5jjWtzHl3lIGE",
@@ -140,54 +141,57 @@ export default {
     };
   },
   mounted() {
-    firebase.auth().languageCode = "th"
+    firebase.auth().languageCode = "th";
     window.recaptchaVerifier = new firebase.auth.RecaptchaVerifier(
       "recaptcha-container",
       {
         size: "invisible",
         callback: function(response) {
           // reCAPTCHA solved, allow signInWithPhoneNumber.
-          this.onRequestOTP()
+          this.onRequestOTP();
         }
       }
     );
   },
   methods: {
-    onSubmit(event) {
+    async onSubmit(event) {
       event.preventDefault();
-      let self = this;
-      axios
-        .post("http://localhost:8000/user/register/", {
+      let response = null
+
+      try {
+        response = await this.$axios.post("/user/register/", {
           email: this.form.email,
           first_name: this.form.firstname,
           last_name: this.form.lastname,
           password: this.form.password,
           phone: this.phoneWithZeroPrepare,
           firebase_uid: this.form.firebase_uid
-        })
-        .then(function(response) {
-          console.log(response)
-          self.$emit("submit", self.form)
-        })
-        .catch(function(error) {
-          console.log(error.response)
         });
+
+        this.$store.commit('setUserToken', response.data.token)
+        this.$store.commit('setUser', response.data)
+        this.$emit('submit', self.form)
+
+      } catch (error) {
+          console.log(error)
+          console.log(error.response)
+      }
     },
     onRequestOTP() {
-      let appVerifier = window.recaptchaVerifier
-      let self = this
+      let appVerifier = window.recaptchaVerifier;
+      let self = this;
       firebase
         .auth()
         .signInWithPhoneNumber(this.phoneWithCountryCode, appVerifier)
         .then(function(confirmationResult) {
-          window.confirmationResult = confirmationResult
-          console.log(confirmationResult)
+          window.confirmationResult = confirmationResult;
+          console.log(confirmationResult);
           self.showOTP = true;
         })
         .catch(function(error) {
           // Error; SMS not sent
-          console.log(error)
-          grecaptcha.reset(window.recaptchaWidgetId)
+          console.log(error);
+          grecaptcha.reset(window.recaptchaWidgetId);
           //   window.recaptchaVerifier.render().then(function(widgetId) {
           //     grecaptcha.reset(widgetId);
           //   });
@@ -198,34 +202,34 @@ export default {
         confirmationResult.verificationId,
         this.form.otp
       );
-      firebase.auth().signInAndRetrieveDataWithCredential(credential)
-      this.form.firebase_uid = firebase.auth().currentUser.uid
+      firebase.auth().signInAndRetrieveDataWithCredential(credential);
+      this.form.firebase_uid = firebase.auth().currentUser.uid;
 
       //For debugging
-      console.log(credential)
-      console.log(firebase.auth().currentUser.uid)
+      console.log(credential);
+      console.log(firebase.auth().currentUser.uid);
     }
   },
   computed: {
     phoneWithCountryCode: function() {
-      let phoneNumber = this.form.phone
-      let countryCode = "+66"
+      let phoneNumber = this.form.phone;
+      let countryCode = "+66";
 
       if (phoneNumber[0] == "0") {
-        phoneNumber = phoneNumber.slice(1, phoneNumber.length)
+        phoneNumber = phoneNumber.slice(1, phoneNumber.length);
       }
 
-      return countryCode + phoneNumber
+      return countryCode + phoneNumber;
       // return this.form.phone
     },
     phoneWithZeroPrepare: function() {
-      let phoneNumber = this.form.phone
+      let phoneNumber = this.form.phone;
 
       if (phoneNumber[0] != "0") {
-        phoneNumber = "0" + phoneNumber
+        phoneNumber = "0" + phoneNumber;
       }
 
-      return phoneNumber
+      return phoneNumber;
     }
   }
 };

@@ -15,6 +15,7 @@
 
 <script>
 import axios from "axios";
+import { mapGetters, mapActions } from 'vuex'
 
 export default {
   data() {
@@ -24,6 +25,9 @@ export default {
     };
   },
   methods: {
+    ...mapActions([
+      'loadUser'
+    ]),
     async onSubmit(event) {
       event.preventDefault();
       let response = await axios.post("http://localhost:8000/user/auth/", {
@@ -31,8 +35,14 @@ export default {
         password: this.password
       });
       this.$store.commit("setUserToken", response.data.token);
+      this.loadUser()
       this.$router.push({ name: "home" });
     }
+  },
+  computed: {
+    ...mapGetters([
+      'getUserToken'
+    ])
   }
 };
 </script>

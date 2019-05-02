@@ -2,15 +2,39 @@
   <div id="app">
     <navbar></navbar>
     <router-view/>
+    {{ user }}
   </div>
 </template>
 
 <script>
 import Navbar from '@/components/Navbar.vue'
+import { mapGetters } from 'vuex'
+import axios from 'axios'
 
 export default {
   components: {
     Navbar
+  },
+  created() {
+    if(this.userToken != null){
+      this.loadUser()
+    }
+  },
+  methods: {
+    async loadUser(){
+      try {
+        let response = await this.$axios.get('/user/me/')
+        this.$store.commit('setUser', response.data)
+      } catch(error) {
+        console.log(error.response)
+      }
+    }
+  },
+  computed: {
+    ...mapGetters({
+      user: 'getUser',
+      userToken: 'getUserToken'
+    })
   }
 };
 </script>
