@@ -61,6 +61,7 @@ export default {
 
 .search-container {
   padding: 30px 20px;
+  border-top: 1px solid $primary-light-color;
 }
 
 .search-container input,

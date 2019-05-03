@@ -71,7 +71,6 @@ export default {
 }
 
 .main-navbar .container{
-  border-bottom: 1px solid $primary-light-color;
   padding-bottom: 15px;
 }
 
@@ -110,5 +109,6 @@ export default {
   border-radius: 3px;
   padding: 2px 10px;
   margin-left: 5px;
+  font-weight: 600;
 }
 </style>
