@@ -3,7 +3,8 @@
         <div class="product-item">
             <div class="product-image">
                 <!-- <img :src=product.images[0]> -->
-                <img src="https://images-na.ssl-images-amazon.com/images/G/01/amazonglobal/images/Fuji/Dash/2019/January/mShoes_2X._CB455678051_SY520_.jpg">
+                <img :src="product.product_picture[0].picture_path" v-if="product.product_picture[0]">
+                <img src="https://via.placeholder.com/300" v-else>
             </div>
             <div class="product-detail">
                 <a href="javascript:void(0)" class="product-title">
@@ -32,11 +33,14 @@ export default {
     margin-bottom: 20px;
     height: 200px;
     text-align: center;
+    overflow: hidden;
 }
 
 .product-item .product-image img{
     height: 100%;
     width: auto;
+    margin-left: 50%;
+    transform: translateX(-50%);
 }
 
 a.wrapper-product-item{
