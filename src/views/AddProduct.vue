@@ -68,6 +68,8 @@
                       class="image-upload"
                       id="image-upload"
                       :options="imageUploadOption"
+                      @vdropzone-success="imageUploadSuccess"
+                      @vdropzone-removed-file="imageUploadRemove"
                     ></vue-dropzone>
                   </b-form-group>
                 </b-col>
@@ -102,6 +104,7 @@
             </b-row>
           </div>
           <!--- end add product preview control --->
+          {{ getUserToken }}
         </div>
       </b-container>
     </div>
@@ -112,6 +115,7 @@
 import { VueEditor } from "vue2-editor";
 import vue2Dropzone from "vue2-dropzone";
 import "vue2-dropzone/dist/vue2Dropzone.min.css";
+import { mapGetters } from 'vuex';
 
 import ProductOverview from "@/components/ProductOverview.vue";
 
@@ -128,8 +132,10 @@ export default {
         category: null,
         quantity: 1,
         wantItem: "",
-        detail: ""
+        detail: "",
+        images: []
       },
+      images_uuid: [],
       categories: [],
       editor: {
         customToolbar: [
@@ -142,7 +148,6 @@ export default {
       },
       imageUploadOption: {
         url: "http://localhost:8000/upload/product/",
-        
         acceptedFiles: "image/*",
         thumbnailMethod: "contain",
         addRemoveLinks: true,
@@ -158,6 +163,7 @@ export default {
   },
   created() {
     this.getCategories()
+    this.imageUploadOption['headers'] = {"Authorization": `Bearer ${this.getUserToken}`}
   },
   methods: {
     onSubmit() {
@@ -198,7 +204,8 @@ export default {
           category_id: this.form.category,
           detail: this.form.detail,
           quantity: this.form.quantity,
-          want_product: this.form.wantItem
+          want_product: this.form.wantItem,
+          images_id: this.form.images
         })
 
         console.log(response.data)
@@ -207,7 +214,29 @@ export default {
       } catch(error) {
         console.log(error.response)
       }
+    },
+    imageUploadSuccess(file, response){
+      this.form.images.push(response.id)
+      this.images_uuid.push({
+        'file_uid': file.upload.uuid,
+        'id': response.id
+      })
+      console.log(response)
+    },
+    imageUploadRemove(file, error, xhr){
+      if (!this.previewMode) {
+        let image_uuid_index = this.images_uuid.findIndex((x) => x.file_uid == file.upload.uuid)
+        let image_upload_id = this.form.images.indexOf(this.images_uuid[image_uuid_index].id)
+        this.form.images.splice(image_upload_id, 1)
+        this.images_uuid.splice(image_uuid_index, 1)
+        console.log(file)
+      }
     }
+  },
+  computed: {
+    ...mapGetters([
+      'getUserToken'
+    ])
   }
 };
 </script>
