@@ -12,7 +12,15 @@
         </b-navbar-nav>
 
         <b-navbar-nav class="ml-auto right-nav">
-          <b-nav-item to="/product/add">เพิ่มสินค้า</b-nav-item>
+          <template v-if='user != null'>
+            <b-nav-item to="/product/add">เพิ่มสินค้า</b-nav-item>
+            <b-nav-item>
+                <div class="notification-btn">
+                  <i class="icofont-notification"></i>
+                  <span class="notification-count">3</span>
+                </div>
+            </b-nav-item>
+          </template>
 
           <b-nav-item-dropdown v-if='user != null' :text="user.first_name" class="nav-profile-btn" right>
             <b-dropdown-item :to="'/profile'">Profile</b-dropdown-item>
@@ -95,5 +103,12 @@ export default {
   color: #000000 !important;
   font-weight: 500;
   margin-top: 0px;
+}
+
+.notification-count{
+  background: #D64561;
+  border-radius: 3px;
+  padding: 2px 10px;
+  margin-left: 5px;
 }
 </style>

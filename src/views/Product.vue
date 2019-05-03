@@ -50,11 +50,7 @@ export default {
         quantity: '',
         url: '',
         wantItem: '',
-        product_picture: [
-          {
-            picture_path: ''
-          }
-        ]
+        product_picture: []
       }
     };
   },

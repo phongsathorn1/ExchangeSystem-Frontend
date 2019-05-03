@@ -3,7 +3,9 @@
     <b-row>
       <b-col md="5">
         <div class="product-images-wrapper">
-          <img :src="images[0].picture_path">
+          <template v-if="images.length > 0">
+            <img :src="images[0].picture_path">
+          </template>
         </div>
       </b-col>
       <b-col md="7">

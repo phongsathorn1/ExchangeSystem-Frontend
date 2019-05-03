@@ -37,6 +37,7 @@ export default {
 
 <style lang="scss">
 @import "assets/custom.scss";
+@import 'assets/icofont/icofont.min.css';
 
 #app {
   -webkit-font-smoothing: antialiased;

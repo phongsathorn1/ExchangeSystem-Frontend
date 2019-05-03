@@ -67,10 +67,13 @@ a.wrapper-product-item {
   cursor: pointer;
   border-radius: 5px;
   transition: all 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
+  background: #FFFFFF;
+  position: relative;
 }
 
 .wrapper-product-item:hover {
   box-shadow: 0px 3px 12px rgba(0, 0, 0, 0.27);
   transform: scale(1.02, 1.02);
+  z-index: 99;
 }
 </style>
