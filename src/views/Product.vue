@@ -16,6 +16,7 @@
           :quantity="product.quantity"
           :detail="product.detail"
           :wantItem="product.want_product"
+          :images="product.product_picture"
         ></product-overview>
       </b-container>
     </div>
@@ -48,7 +49,12 @@ export default {
         owner: '',
         quantity: '',
         url: '',
-        want_product: ''
+        wantItem: '',
+        product_picture: [
+          {
+            picture_path: ''
+          }
+        ]
       }
     };
   },

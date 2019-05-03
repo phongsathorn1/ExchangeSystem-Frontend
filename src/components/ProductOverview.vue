@@ -1,7 +1,11 @@
 <template>
   <div class="product-overview">
     <b-row>
-      <b-col md="5"></b-col>
+      <b-col md="5">
+        <div class="product-images-wrapper">
+          <img :src="images[0].picture_path">
+        </div>
+      </b-col>
       <b-col md="7">
         <h1>{{ title }}</h1>
         <div class="product-meta">
@@ -43,7 +47,7 @@
 <script>
 export default {
   name: "product-overview",
-  props: ["title", "category", "quantity", "wantItem", "detail"]
+  props: ["title", "category", "quantity", "wantItem", "detail", "images"]
 };
 </script>
 
@@ -84,6 +88,10 @@ export default {
 
 .product-detail-text {
   font-family: Helvetica, Arial, sans-serif;
+}
+
+.product-images-wrapper img{
+  width: 100%;
 }
 </style>
 
