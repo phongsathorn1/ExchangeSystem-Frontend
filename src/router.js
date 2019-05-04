@@ -7,6 +7,8 @@ import Register from './views/Register'
 import Product from './views/Product.vue'
 import AddProduct from './views/AddProduct.vue'
 import Profile from './views/Profile.vue'
+import OfferDeal from './views/OfferDeal.vue'
+import DealManager from './views/DealManager.vue'
 
 Vue.use(Router)
 
@@ -51,6 +53,16 @@ export default new Router({
       path: '/profile',
       name: 'profile',
       component: Profile
+    },
+    {
+      path: '/create-offer/:id',
+      name: 'create-offer',
+      component: OfferDeal
+    },
+    {
+      path: '/deal-manager',
+      name: 'deal-manager',
+      component: DealManager
     }
   ]
 })

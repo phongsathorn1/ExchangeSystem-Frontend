@@ -17,6 +17,11 @@
             </div>
           </b-row>
           <b-row>
+            <b-col sm="12">
+              {{ fullName }}<br>
+              <b-button to="/create-offer/1">ยื่นข้อเสนอ</b-button>
+              <hr/>
+            </b-col>
             <b-col sm="6">
               <b>หมวดหมู่</b>
               ​ {{ category.name }}
@@ -49,7 +54,15 @@
 <script>
 export default {
   name: "product-overview",
-  props: ["title", "category", "quantity", "wantItem", "detail", "images"]
+  props: ["title", "category", "quantity", "wantItem", "detail", "images", "owner"],
+  computed:{
+    fullName() {
+      if(this.owner){
+        return this.owner.first_name + " " + this.owner.last_name
+      }
+      return ''
+    }
+  }
 };
 </script>
 

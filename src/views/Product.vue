@@ -17,6 +17,7 @@
           :detail="product.detail"
           :wantItem="product.want_product"
           :images="product.product_picture"
+          :owner="product.owner"
         ></product-overview>
       </b-container>
     </div>
@@ -46,7 +47,7 @@ export default {
         detail: '',
         id: '',
         name: '',
-        owner: '',
+        owner: null,
         quantity: '',
         url: '',
         wantItem: '',
