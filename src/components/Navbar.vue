@@ -23,13 +23,13 @@
           </template>
 
           <b-nav-item-dropdown v-if='user != null' :text="user.first_name" class="nav-profile-btn" right>
-            <b-dropdown-item :to="'/profile'">Profile</b-dropdown-item>
-            <b-dropdown-item href="#" @click='signOut'>Sign Out</b-dropdown-item>
+            <b-dropdown-item :to="'/profile'">โปรไฟล์</b-dropdown-item>
+            <b-dropdown-item href="#" @click='signOut'>ออกจากระบบ</b-dropdown-item>
           </b-nav-item-dropdown>
 
           <b-nav-item-dropdown v-else text="เข้าสู่ระบบ" class="nav-profile-btn" right>
-            <b-dropdown-item :to="'/sign-in'">Sign In</b-dropdown-item>
-            <b-dropdown-item :to="'/register'">Register</b-dropdown-item>
+            <b-dropdown-item :to="'/sign-in'">เข้าสู่ระบบ</b-dropdown-item>
+            <b-dropdown-item :to="'/register'">สมัครสมาชิก</b-dropdown-item>
           </b-nav-item-dropdown>
 
         </b-navbar-nav>
