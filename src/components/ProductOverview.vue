@@ -3,7 +3,7 @@
     <b-row>
       <b-col md="5">
         <div class="product-images-wrapper">
-          <template v-if="images.length > 0">
+          <template v-if="hasImages()">
             <img :src="images[0].picture_path">
           </template>
         </div>
@@ -73,6 +73,19 @@ export default {
         return this.owner.first_name + " " + this.owner.last_name;
       }
       return "";
+    }
+  },
+  methods: {
+    hasImages(){
+      console.log(this.images)
+      if(this.images == null){
+        return false
+      }else{
+        if(this.images.length > 0){
+          return true
+        }
+      }
+      return false
     }
   }
 };
