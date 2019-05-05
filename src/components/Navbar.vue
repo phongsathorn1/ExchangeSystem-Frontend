@@ -8,7 +8,7 @@
       <b-collapse id="nav-collapse" is-nav>
         <b-navbar-nav>
           <b-nav-item to="/">หน้าแรก</b-nav-item>
-          <b-nav-item to="/about">เกี่ยวกับเรา</b-nav-item>
+          <b-nav-item to="/deal-manager">จัดการข้อเสนอ</b-nav-item>
         </b-navbar-nav>
 
         <b-navbar-nav class="ml-auto right-nav">
