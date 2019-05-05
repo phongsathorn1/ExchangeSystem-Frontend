@@ -90,7 +90,11 @@
                 <b-row>
                   <b-col cols="9">
                     <ul class="deal-item-list">
-                      <li class="deal-item-name">{{ offer_deal.product.name }}</li>
+                      <li class="deal-item-name">
+                        <router-link :to="{name: 'product', params: {id: offer_deal.product.id}}">
+                          <span>{{ offer_deal.product.name }}</span>
+                        </router-link>
+                      </li>
                     </ul>
                   </b-col>
                   <b-col cols="3">
