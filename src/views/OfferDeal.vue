@@ -135,6 +135,9 @@ export default {
   },
   mounted() {
     this.loadOfferProduct();
+    window.addEventListener("scroll", event => {
+      this.scrollY = Math.round(window.scrollY);
+    });
   },
   methods: {
     showPreview() {
@@ -201,6 +204,15 @@ export default {
 
 <style lang="scss">
 @import "@/assets/custom.scss";
+
+.item-wrapper {
+  background: #f0f0f0;
+  padding: 30px;
+  border-radius: 10px;
+  position: -webkit-sticky;
+  position: sticky;
+  top: 0px;
+}
 
 .offer-with-block {
   margin: 30px 0;
