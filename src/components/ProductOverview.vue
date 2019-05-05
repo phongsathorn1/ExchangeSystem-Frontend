@@ -12,16 +12,16 @@
         <h1>{{ title }}</h1>
         <div class="product-meta">
           <b-row>
+            <b-col cols="12" class="product-owner">
+              <b>สร้างโดย</b> {{ fullName }}
+            </b-col>
+          </b-row>
+          <b-row>
             <div class="product-status">
               <span class="product-ready product-status-flag">พร้อมให้ยื่นข้อเสนอ</span>
             </div>
           </b-row>
           <b-row>
-            <b-col sm="12">
-              {{ fullName }}<br>
-              <b-button :to="`/create-offer/${id}`">ยื่นข้อเสนอ</b-button>
-              <hr/>
-            </b-col>
             <b-col sm="6">
               <b>หมวดหมู่</b>
               ​ {{ category.name }}
@@ -37,6 +37,9 @@
               {{ wantItem }}
             </b-col>
           </b-row>
+          <div class="product-control">
+            <b-button :to="`/create-offer/${id}`" variant="success">ยื่นข้อเสนอ</b-button>
+          </div>
         </div>
       </b-col>
     </b-row>
@@ -54,13 +57,22 @@
 <script>
 export default {
   name: "product-overview",
-  props: ["id", "title", "category", "quantity", "wantItem", "detail", "images", "owner"],
-  computed:{
+  props: [
+    "id",
+    "title",
+    "category",
+    "quantity",
+    "wantItem",
+    "detail",
+    "images",
+    "owner"
+  ],
+  computed: {
     fullName() {
-      if(this.owner){
-        return this.owner.first_name + " " + this.owner.last_name
+      if (this.owner) {
+        return this.owner.first_name + " " + this.owner.last_name;
       }
-      return ''
+      return "";
     }
   }
 };
@@ -105,8 +117,25 @@ export default {
   font-family: Helvetica, Arial, sans-serif;
 }
 
-.product-images-wrapper img{
-  width: 100%;
+.product-images-wrapper img {
+  max-width: 100%;
+  max-height: 100%;
+}
+
+.product-control {
+  padding: 20px 0;
+}
+
+.product-control .btn{
+  margin: 0;
+}
+
+.product-owner b{
+  font-weight: 600;
+}
+
+.product-owner {
+  margin-bottom: 15px;
 }
 </style>
 

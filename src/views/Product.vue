@@ -86,6 +86,6 @@ export default {
 }
 
 .product-detail .product-image img {
-  width: 100%;
+  max-width: 100%;
 }
 </style>

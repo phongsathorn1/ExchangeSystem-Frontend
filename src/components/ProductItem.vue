@@ -39,14 +39,13 @@ export default {
   margin-bottom: 20px;
   height: 200px;
   text-align: center;
-  overflow: hidden;
+  vertical-align: middle;
+  display: table-cell;
 }
 
 .product-item .product-image img {
-  height: 100%;
-  width: auto;
-  margin-left: 50%;
-  transform: translateX(-50%);
+  max-height: 100%;
+  max-width: auto;
 }
 
 a.wrapper-product-item {
@@ -67,7 +66,7 @@ a.wrapper-product-item {
   cursor: pointer;
   border-radius: 5px;
   transition: all 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
-  background: #FFFFFF;
+  background: #ffffff;
   position: relative;
 }
 
