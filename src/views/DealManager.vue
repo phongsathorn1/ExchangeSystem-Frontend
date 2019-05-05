@@ -62,14 +62,30 @@
                           :to="{name: 'product', params: {id: deal_off.offer_product.id}}"
                         >
                           <span>{{ deal_off.offer_product.name }}</span>
-                          <span class="sub-item-name">(จำนวน {{ deal_off.quantity }})</span>
                         </router-link>
+                        <span class="sub-item-name">(จำนวน {{ deal_off.quantity }})</span>
                       </li>
                     </ul>
                   </b-col>
                   <b-col cols="3">
                     <div class="deal-item-control">
-                      <b-button variant="success">รับข้อเสนอ</b-button>
+                      <b-button
+                        variant="success"
+                        @click="ownerAccept(receive_deal.id)"
+                        v-if="receive_deal.owner_accept == null"
+                      >รับข้อเสนอ</b-button>
+
+                      <div
+                        class="waiting-status"
+                        v-if="receive_deal.owner_accept && receive_deal.offerer_accept == null"
+                      >
+                        <div class="spinner-icon">
+                          <div class="spinner-border" role="status"></div>
+                        </div>
+                        <div class="waiting-msg">
+                          <span>กำลังรอให้ผู้ยื่นข้อเสนอทำการตอบรับ</span>
+                        </div>
+                      </div>
                     </div>
                   </b-col>
                 </b-row>
@@ -127,6 +143,10 @@ export default {
     async loadProduct() {
       let response = await this.$axios.get("/deal/");
       this.datas = response.data;
+    },
+    async ownerAccept(deal_id) {
+      let response = await this.$axios.post(`deal/accept/${deal_id}`);
+      console.log(response);
     }
   }
 };
@@ -226,5 +246,14 @@ export default {
 .your-item-card .product-detail-list {
   padding-left: 25px;
   font-size: 1.1em;
+}
+
+.waiting-status {
+  display: flex;
+  align-items: center;
+}
+
+.waiting-status .waiting-msg {
+  margin-left: 15px;
 }
 </style>

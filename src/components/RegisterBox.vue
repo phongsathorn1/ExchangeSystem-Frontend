@@ -102,7 +102,6 @@
         </b-row>
       </b-col>
     </b-form>
-    <div style="font-size:0.8em">{{ form.firebase_uid }} - {{ phoneWithCountryCode }}</div>
   </div>
 </template>
 

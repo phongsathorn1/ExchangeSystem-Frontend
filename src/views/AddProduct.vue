@@ -91,6 +91,7 @@
               :quantity="form.quantity"
               :detail="form.detail"
               :wantItem="form.wantItem"
+              :images="media_images"
             ></product-overview>
             <!--- end add product preview form --->
             <!--- start add product preview control --->
@@ -104,7 +105,6 @@
             </b-row>
           </div>
           <!--- end add product preview control --->
-          {{ getUserToken }}
         </div>
       </b-container>
     </div>
@@ -135,6 +135,7 @@ export default {
         detail: "",
         images: []
       },
+      media_images: [],
       images_uuid: [],
       categories: [],
       editor: {
@@ -220,6 +221,9 @@ export default {
       this.images_uuid.push({
         'file_uid': file.upload.uuid,
         'id': response.id
+      })
+      this.media_images.push({
+        picture_path: response.picture_path
       })
       console.log(response)
     },
