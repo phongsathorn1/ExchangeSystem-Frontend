@@ -18,6 +18,7 @@
           :wantItem="product.want_product"
           :images="product.product_picture"
           :owner="product.owner"
+          :id="product.id"
         ></product-overview>
       </b-container>
     </div>

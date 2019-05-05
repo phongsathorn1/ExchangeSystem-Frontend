@@ -11,16 +11,28 @@
           <b-col md="6">
             <div class="item-wrapper">
               <div class="item-images">
-                <img src="https://via.placeholder.com/350">
+                <img
+                  :src="product.product_picture[0].picture_path"
+                  v-if="product.product_picture.length > 0"
+                >
+                <img src="https://via.placeholder.com/350" v-else>
               </div>
-              <div class="item-title">
-                <h2>{{ product.name }}</h2>
-              </div>
-              <div class="item-detail-container">
-                <ul>
-                  <li>โดย {{ fullname }}</li>
-                  <li>หมวดหมู่: {{ product.category.name }}</li>
-                </ul>
+              <div class="inner-item-wrapper">
+                <div class="item-title">
+                  <h2>{{ product.name }}</h2>
+                </div>
+                <div class="item-detail-container">
+                  <ul class="item-detail-list">
+                    <li>
+                      <b>โดย</b>
+                      {{ fullname }}
+                    </li>
+                    <li>
+                      <b>หมวดหมู่</b>
+                      {{ product.category.name }}
+                    </li>
+                  </ul>
+                </div>
               </div>
             </div>
           </b-col>
@@ -35,28 +47,27 @@
                 :key="offer_product.id"
               >
                 <div class="item-offer-checkbox">
-                  <b-form-checkbox
-                    v-model="selected"
-                    name="item-offer"
-                    :value="offer_product.id"
-                  ></b-form-checkbox>
+                  <b-form-checkbox v-model="selected" name="item-offer" :value="offer_product.id"></b-form-checkbox>
                 </div>
                 <div class="item-offer-container">
                   <b-row>
-                    <b-col sm="6">
+                    <b-col sm="12">
                       <div class="item-offer-title">{{ offer_product.name }}</div>
                     </b-col>
-                    <b-col sm="6">
+                  </b-row>
+                  <b-row>
+                    <b-col sm="12">
                       <div class="item-offer-count">
                         <b-row>
-                          <b-col cols="6">
+                          <b-col cols="2">
                             <div class="item-offer-count-label">จำนวน</div>
                           </b-col>
-                          <b-col cols="6">
+                          <b-col cols="4">
                             <b-form-input
                               type="number"
                               min="0"
                               value="0"
+                              :max="offer_product.quantity"
                               v-model="data[offer_product.id]"
                               :readonly="disableOfferCount(offer_product.id)"
                             ></b-form-input>
@@ -70,7 +81,9 @@
               <!-- end item-offer-card -->
             </div>
             <!-- end offer-with-block -->
-            <b-button @click="showPreview">ดำเนินการยื่นคำขอ</b-button>
+            <div class="offer-with-control">
+              <b-button @click="showPreview">ดำเนินการยื่นคำขอ</b-button>
+            </div>
           </b-col>
 
           <b-col md="6" v-else>
@@ -78,27 +91,28 @@
               <div class="info">โปรดตรวจสอบความถูกต้องของข้อมูลด้านล่างนี้...</div>
               <h2>แลกด้วยของดังนี้</h2>
 
-              <div class="item-offer-card" v-for="select in selected" :key="select">
-                <div class="item-offer-container">
-                  <b-row>
-                    <b-col sm="6">
-                      <div class="item-offer-title">{{ avaliable_offer_products[offindex(select)].name }}</div>
-                    </b-col>
-                    <b-col sm="6">
-                      <div class="item-offer-count">
-                        <b-row>
-                          <b-col cols="6">
-                            <div class="item-offer-count-label">จำนวน</div>
-                          </b-col>
-                          <b-col cols="6">{{ data[select] }}</b-col>
-                        </b-row>
-                      </div>
-                    </b-col>
-                  </b-row>
+              <div class="offer-with-block">
+                <div class="item-offer-card" v-for="select in selected" :key="select">
+                  <div class="item-offer-container">
+                    <b-row>
+                      <b-col sm="7">
+                        <div
+                          class="item-offer-title"
+                        >{{ avaliable_offer_products[offindex(select)].name }}</div>
+                      </b-col>
+                      <b-col sm="5">
+                        <div class="item-offer-count">
+                          <div class="item-offer-count-label">จำนวน {{ data[select] }}</div>
+                        </div>
+                      </b-col>
+                    </b-row>
+                  </div>
                 </div>
               </div>
-              <b-button @click="goBack">ย้อนกลับไปแก้ไข</b-button>
-              <b-button @click="submit">ยืนยัน</b-button>
+              <div class="offer-with-control">
+                <b-button @click="goBack">ย้อนกลับไปแก้ไข</b-button>
+                <b-button @click="submit">ยืนยัน</b-button>
+              </div>
             </div>
           </b-col>
         </b-row>
@@ -150,27 +164,27 @@ export default {
     disableOfferCount(id) {
       return this.selected.indexOf(id) < 0;
     },
-    async submit(){
-        let data = []
-        this.selected.forEach(element => {
-            data.push({
-                id: element,
-                quantity: this.data[element]
-            })
-        })
+    async submit() {
+      let data = [];
+      this.selected.forEach(element => {
+        data.push({
+          id: element,
+          quantity: this.data[element]
+        });
+      });
 
-        console.log(data)
-        let response = await this.$axios.post('/deal/', {
-            'product_id': this.product.id,
-            'offer_products': data
-        })
+      console.log(data);
+      let response = await this.$axios.post("/deal/", {
+        product_id: this.product.id,
+        offer_products: data
+      });
 
-        console.log(response)
+      console.log(response);
 
-        this.$router.push({name: 'deal-manager'})
+      this.$router.push({ name: "deal-manager" });
     },
-    offindex(select){
-        return this.avaliable_offer_products.findIndex(x => x.id == select)
+    offindex(select) {
+      return this.avaliable_offer_products.findIndex(x => x.id == select);
     }
   },
   computed: {
@@ -189,16 +203,15 @@ export default {
 @import "@/assets/custom.scss";
 
 .offer-with-block {
-  background: #e0e0e0;
-  padding: 25px;
+  margin: 30px 0;
 }
 
 .item-offer-card {
   background: #ffffff;
   border-radius: 5px;
   padding: 20px;
-  display: flex;
   margin: 15px 0px;
+  box-shadow: 0px 3px 10px rgba($color: #000000, $alpha: 0.3);
 }
 
 .item-offer-checkbox {
@@ -224,12 +237,17 @@ export default {
 }
 
 .item-title {
-  padding: 20px 0px;
-  text-align: center;
+  margin-top: 10px;
+  color: $primary-color;
+  font-weight: 600;
 }
 
 .item-images {
   text-align: center;
+}
+
+.item-images img {
+  width: 100%;
 }
 
 #deal-offer .info {
@@ -237,5 +255,23 @@ export default {
   padding: 10px;
   font-weight: 600;
   margin-bottom: 15px;
+}
+
+.offer-with-control {
+  text-align: right;
+}
+
+.inner-item-wrapper {
+  padding: 10px 20px;
+}
+
+.item-detail-list {
+  list-style: none;
+  padding: 10px 0px;
+  font-size: 1.1em;
+}
+
+.item-detail-list li {
+  margin-bottom: 5px;
 }
 </style>
