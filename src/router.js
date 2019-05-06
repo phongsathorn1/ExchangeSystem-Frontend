@@ -56,7 +56,7 @@ export default new Router({
     },
     {
       path: '/profile/:id',
-      name: 'profile',
+      name: 'profile-user',
       component: Profile
     },
     {

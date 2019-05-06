@@ -13,7 +13,7 @@
         <div class="product-meta">
           <b-row>
             <b-col cols="12" class="product-owner">
-              <b>สร้างโดย</b> {{ fullName }}
+              <b>สร้างโดย</b> <router-link :to="{name: 'profile-user', params:{id: owner.id}}">{{ fullName }}</router-link>
             </b-col>
           </b-row>
           <b-row>
