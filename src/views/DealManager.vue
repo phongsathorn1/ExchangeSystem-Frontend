@@ -136,14 +136,19 @@ export default {
   },
   data() {
     return {
-      datas: null
+      datas: null,
+      polling: null
     };
   },
   mounted() {
     this.loadProduct()
-    setInterval(this.loadProduct, 3000);
   },
-  created() {},
+  created() {
+    this.polling = setInterval(this.loadProduct, 10000);
+  },
+  beforeDestroy(){
+    clearInterval(this.polling)
+  },
   methods: {
     async loadProduct() {
       let response = await this.$axios.get("/deal/");
