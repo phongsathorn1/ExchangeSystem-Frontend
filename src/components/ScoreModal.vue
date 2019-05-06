@@ -6,14 +6,16 @@
     @ok="handleOk(dealId)"
   >
     <template slot="default">
-      <p class="my-4">คะแนนที่คุณอยากจะให้ (เต็ม 5 คะแนน)</p>
-      <star-rating
-        :max-rating="5"
-        :increment="1"
-        :show-rating="false"
-        v-model="scoreForm.score"
-        @rating-selected="handleRating"
-      ></star-rating>
+      <div class="text-center inner-score-modal">
+        <p>คะแนนที่คุณอยากจะให้ (เต็ม 5 คะแนน)</p>
+        <star-rating
+          :max-rating="5"
+          :increment="1"
+          :show-rating="false"
+          v-model="scoreForm.score"
+          @rating-selected="handleRating"
+        ></star-rating>
+      </div>
     </template>
 
     <template slot="modal-footer" slot-scope="{ ok, cancel }">
@@ -55,3 +57,12 @@ export default {
   }
 };
 </script>
+
+<style lang="scss">
+.vue-star-rating{
+    justify-content: center;
+}
+.inner-score-modal{
+    padding: 25px 0;
+}
+</style>
