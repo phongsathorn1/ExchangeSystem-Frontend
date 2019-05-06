@@ -1,7 +1,7 @@
 <template>
   <router-link
     :to="{name: 'product', params: {id: product.id}}"
-    class="col-md-3 wrapper-product-item"
+    class="col-md-4 col-lg-3 wrapper-product-item"
   >
     <div class="product-item">
       <div class="product-image">
