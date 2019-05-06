@@ -1,8 +1,8 @@
 <template>
-  <div id="profile">
+  <div id="profile" v-if="data">
     <div class="header">
       <b-container>
-        <div class="profile" v-if="data != null">
+        <div class="profile">
           <b-row>
             <b-col md="3">
               <div class="profile-image">
@@ -13,7 +13,16 @@
             </b-col>
             <b-col md="9">
               <div class="profile-meta">
-                <h3>{{ fullname }}</h3>
+                <b-row>
+                  <b-col md="8">
+                    <h3>{{ fullname }}</h3>
+                  </b-col>
+                  <b-col md="4">
+                    <div>
+                      <b-button>แก้ไขโปรไฟล์</b-button>
+                    </div>
+                  </b-col>
+                </b-row>
                 <b-row>
                   <b-col sm="4">
                     <div class="profile-meta-block">
@@ -69,19 +78,22 @@ export default {
       data: null
     };
   },
-  mounted() {
+  created() {
     this.loadProfile()
-    
   },
   methods: {
     async loadProfile() {
       let response = null
-      if(this.$route.params.id){
+      if(Object.keys(this.$route.params).length !== 0){
+        console.log('0')
         response = await this.$axios.get(`/user/profile/${this.$route.params.id}/`)
+        this.data = response.data
       }else{
-        response = await this.$axios.get(`/user/profile/${this.getUser.id}/`)
+        if(this.getUser){
+          response = await this.$axios.get(`/user/profile/${this.getUser.id}/`)
+          this.data = response.data
+        }
       }
-      this.data = response.data
     }
   },
   computed: {
@@ -99,6 +111,15 @@ export default {
         return `${this.data.score * 100}%`
       }
       return 'ไม่สามารถคำนวณคะแนนได้'
+    }
+  },
+  watch:{
+    async getUser(){
+      if(Object.keys(this.$route.params).length === 0){
+        console.log('1')
+        let response = await this.$axios.get(`/user/profile/${this.getUser.id}/`)
+        this.data = response.data
+      }
     }
   }
 };

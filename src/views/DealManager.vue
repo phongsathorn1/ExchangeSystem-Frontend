@@ -258,8 +258,8 @@ export default {
       this.scoreForm.dealId = dealId;
     },
 
-    async handleOk(dealId) {
-      let response = await this.$axios.post(`deal/${dealId}/score/`, {
+    async handleOk(deal) {
+      let response = await this.$axios.post(`deal/${deal.dealId}/score/`, {
         score: this.scoreForm.score
       });
       console.log(response);

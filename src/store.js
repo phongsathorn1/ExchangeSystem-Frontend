@@ -51,6 +51,9 @@ export default new Vuex.Store({
         }
       }
     },
+    getUser ({ state }) {
+      return state.user
+    },
     logOut ({ commit }) {
       commit('removeToken')
       delete Vue.prototype.$axios.defaults.headers.common['Authorization']

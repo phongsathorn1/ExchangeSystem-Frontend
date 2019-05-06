@@ -3,11 +3,12 @@
     id="score-box"
     v-model="modalShow"
     title="ให้คะแนนสำหรับการแลกเปลี่ยนในครั้งนี้"
-    @ok="handleOk(dealId)"
+    @ok="handleOk()"
+    centered
   >
     <template slot="default">
       <div class="text-center inner-score-modal">
-        <p>คะแนนที่คุณอยากจะให้ (เต็ม 5 คะแนน)</p>
+        <p class="score-modal-title">คะแนนที่คุณอยากจะให้ (เต็ม 5 คะแนน)</p>
         <star-rating
           :max-rating="5"
           :increment="1"
@@ -15,6 +16,7 @@
           v-model="scoreForm.score"
           @rating-selected="handleRating"
         ></star-rating>
+        <span class="preview-score">{{ previewScore }}</span>
       </div>
     </template>
 
@@ -29,14 +31,15 @@
 import StarRating from "vue-star-rating";
 
 export default {
-  props: ["value", "dealId"],
+  props: ["value"],
   components: {
     StarRating
   },
   data() {
     return {
       scoreForm: this.value,
-      modalShow: false
+      modalShow: false,
+      hoverScore: null
     };
   },
   methods: {
@@ -44,7 +47,7 @@ export default {
       this.$emit("input", this.scoreForm);
     },
     handleOk() {
-      this.$emit("ok", scoreForm);
+      this.$emit("ok", this.scoreForm);
     }
   },
   watch: {
@@ -54,6 +57,14 @@ export default {
         this.scoreForm.score = null;
       }
     }
+  },
+  computed: {
+      previewScore(){
+          if(this.scoreForm.score){
+              return this.scoreForm.score
+          }
+          return 'ยังไม่ได้ระบุคะแนน'
+      }
   }
 };
 </script>
@@ -64,5 +75,15 @@ export default {
 }
 .inner-score-modal{
     padding: 25px 0;
+}
+.preview-score{
+    margin-top: 20px;
+    display: inline-block;
+    font-size: 1.1em;
+}
+.score-modal-title{
+    font-size: 1.2em;
+    font-weight: 600;
+    margin-bottom: 20px;
 }
 </style>
