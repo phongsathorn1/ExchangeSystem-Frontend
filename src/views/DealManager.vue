@@ -51,7 +51,7 @@
                 :key="receive_deal.id"
               >
                 <b-row>
-                  <b-col cols="9">
+                  <b-col cols="8">
                     <ul class="deal-item-list">
                       <li
                         class="deal-item-name"
@@ -67,7 +67,7 @@
                       </li>
                     </ul>
                   </b-col>
-                  <b-col cols="3">
+                  <b-col cols="4">
                     <div class="deal-item-control">
                       <b-button
                         variant="success"
@@ -75,9 +75,40 @@
                         v-if="receive_deal.owner_accept == null"
                       >รับข้อเสนอ</b-button>
 
-                      <waiting-status v-if="receive_deal.owner_accept && receive_deal.offerer_accept == null">
-                        กำลังรอให้ผู้ยื่นข้อเสนอทำการตอบรับ
-                      </waiting-status>
+                      <waiting-status
+                        v-if="receive_deal.owner_accept && receive_deal.offerer_accept == null"
+                      >กำลังรอให้ผู้ยื่นข้อเสนอทำการตอบรับ</waiting-status>
+
+                      <template v-if="receive_deal.owner_accept && receive_deal.offerer_accept">
+                        <b-button
+                          @click="setScoreForm(receive_deal.id)"
+                          v-b-modal.score-box
+                        >ให้คะแนนการแลกเปลี่ยนครั้งนี้</b-button>
+
+                        <!-- receive-modal -->
+                        <!-- <b-modal
+                          id="score-box"
+                          v-model="modalShow"
+                          title="ให้คะแนนสำหรับการแลกเปลี่ยนในครั้งนี้"
+                          @ok="handleOk(receive_deal.id)"
+                        >
+                          <template slot="default">
+                            <p class="my-4">คะแนนที่คุณอยากจะให้ (เต็ม 5 คะแนน)</p>
+                            <star-rating
+                              :max-rating="5"
+                              :increment="1"
+                              :show-rating="false"
+                              v-model="scoreForm.score"
+                            ></star-rating>
+                          </template>
+
+                          <template slot="modal-footer" slot-scope="{ ok, cancel }">
+                            <b-button size="sm" @click="cancel()">ยกเลิก</b-button>
+                            <b-button size="sm" variant="primary" :disabled="!scoreForm.score" @click="ok()">ให้คะแนน</b-button>
+                          </template>
+                        </b-modal>-->
+                        <!-- end receive-modal -->
+                      </template>
                     </div>
                   </b-col>
                 </b-row>
@@ -96,7 +127,7 @@
                 :key="offer_deal.id"
               >
                 <b-row>
-                  <b-col cols="9">
+                  <b-col cols="8">
                     <ul class="deal-item-list">
                       <li class="deal-item-name">
                         <router-link :to="{name: 'product', params: {id: offer_deal.product.id}}">
@@ -105,16 +136,26 @@
                       </li>
                     </ul>
                   </b-col>
-                  <b-col cols="3">
+                  <b-col cols="4">
                     <div class="deal-item-control">
-                      <waiting-status v-if="offer_deal.owner_accept == null">
-                        กำลังรอให้ผู้สร้างข้อเสนอตอบรับข้อเสนอ
-                      </waiting-status>
-                      
-                      <div class="submiting-status" v-if="offer_deal.owner_accept && offer_deal.offerer_accept == null">
+                      <waiting-status
+                        v-if="offer_deal.owner_accept == null"
+                      >กำลังรอให้ผู้สร้างข้อเสนอตอบรับข้อเสนอ</waiting-status>
+
+                      <div
+                        class="submiting-status"
+                        v-if="offer_deal.owner_accept && offer_deal.offerer_accept == null"
+                      >
                         <span>ผู้สร้างข้อเสนอตอบรับข้อเสนอนี้แล้ว</span>
-                        <b-button variant="success" @click="ownerAccept(offer_deal)">ยืนยันรับข้อเสนอ</b-button>
+                        <b-button
+                          variant="success"
+                          @click="ownerAccept(offer_deal)"
+                        >ยืนยันรับข้อเสนอ</b-button>
                       </div>
+
+                      <template v-if="offer_deal.owner_accept && offer_deal.offerer_accept">
+                        <b-button @click="setScoreForm(offer_deal.id)" v-b-modal.score-box>ให้คะแนนการแลกเปลี่ยนครั้งนี้</b-button>
+                      </template>
                     </div>
                   </b-col>
                 </b-row>
@@ -122,32 +163,44 @@
             </div>
           </div>
         </div>
+        <!-- receive-modal -->
+        <score-modal v-model="scoreForm" @ok="handleOk"></score-modal>
+        <!-- end receive-modal -->
       </b-container>
     </div>
   </div>
 </template>
 
 <script>
-import WaitingStatus from '@/components/WaitingStatus.vue'
+import WaitingStatus from "@/components/WaitingStatus.vue";
+import StarRating from "vue-star-rating";
+import ScoreModal from "@/components/ScoreModal.vue";
 
 export default {
   components: {
-    WaitingStatus
+    WaitingStatus,
+    StarRating,
+    ScoreModal
   },
   data() {
     return {
       datas: null,
-      polling: null
+      polling: null,
+      scoreForm: {
+        dealId: null,
+        score: null
+      },
+      modalShow: false
     };
   },
   mounted() {
-    this.loadProduct()
+    this.loadProduct();
   },
   created() {
     this.polling = setInterval(this.loadProduct, 10000);
   },
-  beforeDestroy(){
-    clearInterval(this.polling)
+  beforeDestroy() {
+    clearInterval(this.polling);
   },
   methods: {
     async loadProduct() {
@@ -156,46 +209,68 @@ export default {
     },
     async ownerAccept(deal) {
       let response = await this.$axios.post(`deal/accept/${deal.id}`);
-      
-      if(this.findDealIndexInOffersDeal(deal) != null){
-        let index = this.findDealIndexInOffersDeal(deal)
-        console.log(index)
-        this.datas[index[0]].offer_deals[index[1]].offerer_accept = response.data.offerer_accept
-        this.datas[index[0]].offer_deals[index[1]].owner_accept = response.data.owner_accept
-      }
-      else if(this.findDealIndexInRecievesDeal(deal) != null){
-        let index = this.findDealIndexInRecievesDeal(deal)
-        console.log(index)
-        this.datas[index[0]].receive_deals[index[1]].offerer_accept = response.data.offerer_accept
-        this.datas[index[0]].receive_deals[index[1]].owner_accept = response.data.owner_accept
-      }else{
-        console.log("not find")
+
+      if (this.findDealIndexInOffersDeal(deal) != null) {
+        let index = this.findDealIndexInOffersDeal(deal);
+        console.log(index);
+        this.datas[index[0]].offer_deals[index[1]].offerer_accept =
+          response.data.offerer_accept;
+        this.datas[index[0]].offer_deals[index[1]].owner_accept =
+          response.data.owner_accept;
+      } else if (this.findDealIndexInRecievesDeal(deal) != null) {
+        let index = this.findDealIndexInRecievesDeal(deal);
+        console.log(index);
+        this.datas[index[0]].receive_deals[index[1]].offerer_accept =
+          response.data.offerer_accept;
+        this.datas[index[0]].receive_deals[index[1]].owner_accept =
+          response.data.owner_accept;
+      } else {
+        console.log("not find");
       }
     },
 
     findDealIndexInOffersDeal(deal) {
-      for(let i = 0; i < this.datas.length; i++){
-        console.log(this.datas[i])
-        for(let j = 0; j < this.datas[i].offer_deals.length; j++){
-          console.log(this.datas[i].offer_deals[j].id)
-          if(this.datas[i].offer_deals[j].id == deal.id){
-            return [i,j]
+      for (let i = 0; i < this.datas.length; i++) {
+        console.log(this.datas[i]);
+        for (let j = 0; j < this.datas[i].offer_deals.length; j++) {
+          console.log(this.datas[i].offer_deals[j].id);
+          if (this.datas[i].offer_deals[j].id == deal.id) {
+            return [i, j];
           }
         }
       }
-      return null
+      return null;
     },
-    findDealIndexInRecievesDeal(deal){
-      for(let i = 0; i < this.datas.length; i++){
-        console.log(this.datas[i])
-        for(let j = 0; j < this.datas[i].receive_deals.length; j++){
-          console.log(this.datas[i].receive_deals[j].id)
-          if(this.datas[i].receive_deals[j].id == deal.id){
-            return [i,j]
+    findDealIndexInRecievesDeal(deal) {
+      for (let i = 0; i < this.datas.length; i++) {
+        console.log(this.datas[i]);
+        for (let j = 0; j < this.datas[i].receive_deals.length; j++) {
+          console.log(this.datas[i].receive_deals[j].id);
+          if (this.datas[i].receive_deals[j].id == deal.id) {
+            return [i, j];
           }
         }
       }
-      return null
+      return null;
+    },
+
+    setScoreForm(dealId) {
+      this.scoreForm.dealId = dealId;
+    },
+
+    async handleOk(dealId) {
+      let response = await this.$axios.post(`deal/${dealId}/score/`, {
+        score: this.scoreForm.score
+      });
+      console.log(response);
+    }
+  },
+  watch: {
+    modalShow() {
+      if (!this.modalShow) {
+        this.scoreForm.dealId = null;
+        this.scoreForm.score = null;
+      }
     }
   }
 };
