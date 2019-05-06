@@ -8574,6 +8574,11 @@ vm-browserify@0.0.4:
   dependencies:
     indexof "0.0.1"
 
+vue-avatar-cropper@^1.0.5:
+  version "1.0.5"
+  resolved "https://registry.yarnpkg.com/vue-avatar-cropper/-/vue-avatar-cropper-1.0.5.tgz#c4be274d61bd699bfe2510deb053e2e49032cfb2"
+  integrity sha512-NNIZrc2CKZx8iIeVHom6PTxPgNtPolrmTkE0nlSokcf7shSse7XpiIXvJmBI/P3Jy2k4a31iroSYc31wn93sMg==
+
 vue-eslint-parser@^2.0.3:
   version "2.0.3"
   resolved "https://registry.yarnpkg.com/vue-eslint-parser/-/vue-eslint-parser-2.0.3.tgz#c268c96c6d94cfe3d938a5f7593959b0ca3360d1"

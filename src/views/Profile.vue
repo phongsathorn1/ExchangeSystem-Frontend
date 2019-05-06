@@ -2,7 +2,7 @@
   <div id="profile">
     <div class="header">
       <b-container>
-        <div class="profile">
+        <div class="profile" v-if="data != null">
           <b-row>
             <b-col md="3">
               <div class="profile-image">
@@ -13,18 +13,18 @@
             </b-col>
             <b-col md="9">
               <div class="profile-meta">
-                <h3>พงศธร กิตติวรปัญญา</h3>
+                <h3>{{ fullname }}</h3>
                 <b-row>
                   <b-col sm="4">
                     <div class="profile-meta-block">
                       <div class="profile-meta-block-title">คะแนนความพึงพอใจ</div>
-                      <div class="profile-meta-block-detail">95%</div>
+                      <div class="profile-meta-block-detail">{{ scorePercent }}</div>
                     </div>
                   </b-col>
                   <b-col sm="4">
                     <div class="profile-meta-block">
-                      <div class="profile-meta-block-title">จำนวนของทั้งหมด</div>
-                      <div class="profile-meta-block-detail">5 ชิ้น</div>
+                      <div class="profile-meta-block-title">จำนวนของที่พร้อมให้ส่งข้อเสนอ</div>
+                      <div class="profile-meta-block-detail">{{ productCount }}</div>
                     </div>
                   </b-col>
                 </b-row>
@@ -36,22 +36,60 @@
     </div>
     <div class="wrapper-container">
       <b-container>
-          <h1>สินค้าของ พงศธร</h1>
+        <div class="profile-avaliable-products">
+          <h1>สินค้าของที่พร้อมให้ส่งข้อเสนอ</h1>
+          <b-row>
+            <product-item
+            v-for="product in data.avaliable_products"
+            :product=product
+            :key="product.id">
+            </product-item>
+          </b-row>
+        </div>
       </b-container>
     </div>
   </div>
 </template>
 
 <script>
+import ProductItem from '@/components/ProductItem.vue'
+
 export default {
+  components: {
+    ProductItem
+  },
   data() {
     return {
       profileImage: require("@/assets/images/profile.jpg"),
       profileProp: {
         height: 300,
         width: 300
-      }
+      },
+      data: null
     };
+  },
+  mounted() {
+    this.loadProfile()
+  },
+  methods: {
+    async loadProfile() {
+      let response = await this.$axios.get("/user/profile/1/")
+      this.data = response.data
+    }
+  },
+  computed: {
+    fullname: function() {
+      return `${this.data.profile.first_name} ${this.data.profile.last_name}`
+    },
+    productCount: function() {
+      return this.data.avaliable_products.length
+    },
+    scorePercent: function() {
+      if(this.data.score){
+        return `${this.data.score * 100}%`
+      }
+      return 'ไม่สามารถคำนวณคะแนนได้'
+    }
   }
 };
 </script>
@@ -86,6 +124,7 @@ export default {
   background: $primary-light-color;
   padding: 10px 30px;
   margin: 20px 0px;
+  height: 100%;
 }
 
 .profile-meta-block .profile-meta-block-title {
@@ -97,5 +136,17 @@ export default {
 .profile-meta-block .profile-meta-block-detail {
   font-size: 1.5em;
   text-align: center;
+}
+
+.profile-avaliable-products {
+  padding: 20px 0;
+}
+
+.profile-avaliable-products h1{
+  color: $primary-color;
+  font-size: 1.9em;
+  border-bottom: 1px solid #e0e0e0;
+  padding-bottom: 10px;
+  margin-bottom: 20px;
 }
 </style>

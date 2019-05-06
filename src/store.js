@@ -24,6 +24,11 @@ export default new Vuex.Store({
     setUser (state, payload) {
       state.user = payload
     },
+    setUserAvatar (state, pictureUrl) {
+      if (state.user != null) {
+        state.user.picture = pictureUrl
+      }
+    },
     removeToken (state) {
       state.userToken = null
       state.user = null
@@ -49,6 +54,9 @@ export default new Vuex.Store({
     logOut ({ commit }) {
       commit('removeToken')
       delete Vue.prototype.$axios.defaults.headers.common['Authorization']
+    },
+    setUserAvatar ({ commit }, pictureUrl) {
+      commit('setUserAvatar', pictureUrl)
     }
   }
 })
