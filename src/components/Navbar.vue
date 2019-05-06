@@ -1,5 +1,5 @@
 <template>
-  <b-navbar toggleable="lg" class="main-navbar">
+  <b-navbar toggleable="lg" type="dark" class="main-navbar">
     <b-container>
       <b-navbar-brand tag="h1" class="mb-0" to="/">Trading</b-navbar-brand>
 
