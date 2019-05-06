@@ -7,7 +7,7 @@
             <b-col md="3">
               <div class="profile-image">
                 <div class="inner-profile-image">
-                  <img src="@/assets/images/profile.jpg" class="profile-image-raw">
+                  <img :src="data.profile.picture" class="profile-image-raw">
                 </div>
               </div>
             </b-col>
@@ -53,6 +53,7 @@
 
 <script>
 import ProductItem from '@/components/ProductItem.vue'
+import { mapGetters } from 'vuex'
 
 export default {
   components: {
@@ -70,14 +71,23 @@ export default {
   },
   mounted() {
     this.loadProfile()
+    
   },
   methods: {
     async loadProfile() {
-      let response = await this.$axios.get("/user/profile/1/")
+      let response = null
+      if(this.$route.params.id){
+        response = await this.$axios.get(`/user/profile/${this.$route.params.id}/`)
+      }else{
+        response = await this.$axios.get(`/user/profile/${this.getUser.id}/`)
+      }
       this.data = response.data
     }
   },
   computed: {
+    ...mapGetters([
+      'getUser'
+    ]),
     fullname: function() {
       return `${this.data.profile.first_name} ${this.data.profile.last_name}`
     },

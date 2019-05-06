@@ -55,6 +55,11 @@ export default new Router({
       component: Profile
     },
     {
+      path: '/profile/:id',
+      name: 'profile',
+      component: Profile
+    },
+    {
       path: '/create-offer/:id',
       name: 'create-offer',
       component: OfferDeal
