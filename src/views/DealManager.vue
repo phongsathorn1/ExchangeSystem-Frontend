@@ -71,21 +71,13 @@
                     <div class="deal-item-control">
                       <b-button
                         variant="success"
-                        @click="ownerAccept(receive_deal.id)"
+                        @click="ownerAccept(receive_deal)"
                         v-if="receive_deal.owner_accept == null"
                       >รับข้อเสนอ</b-button>
 
-                      <div
-                        class="waiting-status"
-                        v-if="receive_deal.owner_accept && receive_deal.offerer_accept == null"
-                      >
-                        <div class="spinner-icon">
-                          <div class="spinner-border" role="status"></div>
-                        </div>
-                        <div class="waiting-msg">
-                          <span>กำลังรอให้ผู้ยื่นข้อเสนอทำการตอบรับ</span>
-                        </div>
-                      </div>
+                      <waiting-status v-if="receive_deal.owner_accept && receive_deal.offerer_accept == null">
+                        กำลังรอให้ผู้ยื่นข้อเสนอทำการตอบรับ
+                      </waiting-status>
                     </div>
                   </b-col>
                 </b-row>
@@ -115,7 +107,14 @@
                   </b-col>
                   <b-col cols="3">
                     <div class="deal-item-control">
-                      <b-button variant="success">รับข้อเสนอ</b-button>
+                      <waiting-status v-if="offer_deal.owner_accept == null">
+                        กำลังรอให้ผู้สร้างข้อเสนอตอบรับข้อเสนอ
+                      </waiting-status>
+                      
+                      <div class="submiting-status" v-if="offer_deal.owner_accept && offer_deal.offerer_accept == null">
+                        <span>ผู้สร้างข้อเสนอตอบรับข้อเสนอนี้แล้ว</span>
+                        <b-button variant="success" @click="ownerAccept(offer_deal)">ยืนยันรับข้อเสนอ</b-button>
+                      </div>
                     </div>
                   </b-col>
                 </b-row>
@@ -129,14 +128,20 @@
 </template>
 
 <script>
+import WaitingStatus from '@/components/WaitingStatus.vue'
+
 export default {
+  components: {
+    WaitingStatus
+  },
   data() {
     return {
       datas: null
     };
   },
   mounted() {
-    this.loadProduct();
+    this.loadProduct()
+    setInterval(this.loadProduct, 3000);
   },
   created() {},
   methods: {
@@ -144,9 +149,48 @@ export default {
       let response = await this.$axios.get("/deal/");
       this.datas = response.data;
     },
-    async ownerAccept(deal_id) {
-      let response = await this.$axios.post(`deal/accept/${deal_id}`);
-      console.log(response);
+    async ownerAccept(deal) {
+      let response = await this.$axios.post(`deal/accept/${deal.id}`);
+      
+      if(this.findDealIndexInOffersDeal(deal) != null){
+        let index = this.findDealIndexInOffersDeal(deal)
+        console.log(index)
+        this.datas[index[0]].offer_deals[index[1]].offerer_accept = response.data.offerer_accept
+        this.datas[index[0]].offer_deals[index[1]].owner_accept = response.data.owner_accept
+      }
+      else if(this.findDealIndexInRecievesDeal(deal) != null){
+        let index = this.findDealIndexInRecievesDeal(deal)
+        console.log(index)
+        this.datas[index[0]].receive_deals[index[1]].offerer_accept = response.data.offerer_accept
+        this.datas[index[0]].receive_deals[index[1]].owner_accept = response.data.owner_accept
+      }else{
+        console.log("not find")
+      }
+    },
+
+    findDealIndexInOffersDeal(deal) {
+      for(let i = 0; i < this.datas.length; i++){
+        console.log(this.datas[i])
+        for(let j = 0; j < this.datas[i].offer_deals.length; j++){
+          console.log(this.datas[i].offer_deals[j].id)
+          if(this.datas[i].offer_deals[j].id == deal.id){
+            return [i,j]
+          }
+        }
+      }
+      return null
+    },
+    findDealIndexInRecievesDeal(deal){
+      for(let i = 0; i < this.datas.length; i++){
+        console.log(this.datas[i])
+        for(let j = 0; j < this.datas[i].receive_deals.length; j++){
+          console.log(this.datas[i].receive_deals[j].id)
+          if(this.datas[i].receive_deals[j].id == deal.id){
+            return [i,j]
+          }
+        }
+      }
+      return null
     }
   }
 };
