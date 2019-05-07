@@ -49,6 +49,7 @@
                 v-else
                 v-for="receive_deal in data.receive_deals"
                 :key="receive_deal.id"
+                :id="'deal'+receive_deal.id"
               >
                 <b-row>
                   <b-col cols="8">
@@ -84,30 +85,6 @@
                           @click="setScoreForm(receive_deal.id)"
                           v-b-modal.score-box
                         >ให้คะแนนการแลกเปลี่ยนครั้งนี้</b-button>
-
-                        <!-- receive-modal -->
-                        <!-- <b-modal
-                          id="score-box"
-                          v-model="modalShow"
-                          title="ให้คะแนนสำหรับการแลกเปลี่ยนในครั้งนี้"
-                          @ok="handleOk(receive_deal.id)"
-                        >
-                          <template slot="default">
-                            <p class="my-4">คะแนนที่คุณอยากจะให้ (เต็ม 5 คะแนน)</p>
-                            <star-rating
-                              :max-rating="5"
-                              :increment="1"
-                              :show-rating="false"
-                              v-model="scoreForm.score"
-                            ></star-rating>
-                          </template>
-
-                          <template slot="modal-footer" slot-scope="{ ok, cancel }">
-                            <b-button size="sm" @click="cancel()">ยกเลิก</b-button>
-                            <b-button size="sm" variant="primary" :disabled="!scoreForm.score" @click="ok()">ให้คะแนน</b-button>
-                          </template>
-                        </b-modal>-->
-                        <!-- end receive-modal -->
                       </template>
                     </div>
                   </b-col>

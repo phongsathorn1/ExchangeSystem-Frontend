@@ -2,9 +2,7 @@
   <div id="home">
     <div class="header">
       <b-container>
-        <b-row>
-          <search></search>
-        </b-row>
+        <search></search>
       </b-container>
     </div>
     <div class="wrapper-container">
@@ -31,7 +29,7 @@ import Search from "@/components/Search.vue";
 import ProductOverview from "@/components/ProductOverview.vue";
 
 export default {
-  props: ['id'],
+  props: ["id"],
   name: "product",
   components: {
     ProductItem,
@@ -42,31 +40,33 @@ export default {
     return {
       product: {
         category: {
-          id: '',
-          name: ''
+          id: "",
+          name: ""
         },
-        detail: '',
-        id: '',
-        name: '',
+        detail: "",
+        id: "",
+        name: "",
         owner: null,
-        quantity: '',
-        url: '',
-        wantItem: '',
+        quantity: "",
+        url: "",
+        wantItem: "",
         product_picture: []
       }
     };
   },
-  mounted(){
-    this.getProduct()
+  mounted() {
+    this.getProduct();
   },
   methods: {
     async getProduct() {
       try {
-        let response = await this.$axios.get(`/product/${this.$route.params.id}/`)
-        this.product = response.data
-        console.log(response.data)
-      } catch(error) {
-        console.log(error)
+        let response = await this.$axios.get(
+          `/product/${this.$route.params.id}/`
+        );
+        this.product = response.data;
+        console.log(response.data);
+      } catch (error) {
+        console.log(error);
       }
     }
   }

@@ -32,13 +32,14 @@ export default new Vuex.Store({
     removeToken (state) {
       state.userToken = null
       state.user = null
-      localStorage.removeItem('user_token')
     }
   },
   actions: {
     loadUserToken ({ commit }) {
       let token = localStorage.getItem('user_token')
-      commit('setUserToken', token)
+      if (token) {
+        commit('setUserToken', token)
+      }
     },
     async loadUser ({ commit, state }) {
       if (state.userToken != null) {
@@ -49,6 +50,8 @@ export default new Vuex.Store({
         } catch (error) {
           console.log(error)
         }
+      } else {
+        delete Vue.prototype.$axios.defaults.headers.common['Authorization']
       }
     },
     getUser ({ state }) {
@@ -56,6 +59,7 @@ export default new Vuex.Store({
     },
     logOut ({ commit }) {
       commit('removeToken')
+      localStorage.removeItem('user_token')
       delete Vue.prototype.$axios.defaults.headers.common['Authorization']
     },
     setUserAvatar ({ commit }, pictureUrl) {

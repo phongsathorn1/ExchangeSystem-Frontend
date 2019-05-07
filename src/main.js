@@ -4,19 +4,26 @@ import router from './router'
 import store from './store'
 // import Vuex from 'vuex'
 import axios from 'axios'
+import vueMoment from 'vue-moment'
+import moment from 'moment'
 
 import BootstrapVue from 'bootstrap-vue'
 
 Vue.config.productionTip = false
 
 Vue.use(BootstrapVue)
+Vue.use(vueMoment, { moment })
 
+Vue.prototype.$moment.locale('th')
 Vue.prototype.$axios = axios.create({
   baseURL: 'http://localhost:8000/'
 })
 
-if (localStorage.getItem('user_token')) {
-  Vue.prototype.$axios.defaults.headers.common['Authorization'] = `Bearer ${localStorage.getItem('user_token')}`
+const token = localStorage.getItem('user_token')
+
+if (token === null) {
+  console.log(token)
+  Vue.prototype.$axios.defaults.headers.common['Authorization'] = `Bearer ${token}`
 } else {
   delete Vue.prototype.$axios.defaults.headers.common['Authorization']
 }
