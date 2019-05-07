@@ -1,18 +1,26 @@
 <template>
   <div id="app">
-    <navbar></navbar>
+    <navbar @toggle="handleToggle"></navbar>
+    <notification-pane :show="showNotification" @close="handleToggle('notification')"></notification-pane>
     <router-view/>
   </div>
 </template>
 
 <script>
 import Navbar from '@/components/Navbar.vue'
+import NotificationPane from '@/components/NotificationPane.vue'
 import { mapGetters, mapActions } from 'vuex'
 import axios from 'axios'
 
 export default {
   components: {
-    Navbar
+    Navbar,
+    NotificationPane
+  },
+  data(){
+    return {
+      showNotification: false
+    }
   },
   created() {
     this.loadUserToken()
@@ -22,7 +30,12 @@ export default {
     ...mapActions([
       'loadUserToken',
       'loadUser'
-    ])
+    ]),
+    handleToggle(element){
+      if(element == 'notification'){
+        this.showNotification = !this.showNotification
+      }
+    }
   },
   computed: {
     ...mapGetters({

@@ -14,7 +14,7 @@
         <b-navbar-nav class="ml-auto right-nav">
           <template v-if='user != null'>
             <b-nav-item to="/product/add">เพิ่มสินค้า</b-nav-item>
-            <b-nav-item>
+            <b-nav-item @click="openNotificationPane">
                 <div class="notification-btn">
                   <i class="icofont-notification"></i>
                   <span class="notification-count">3</span>
@@ -55,6 +55,9 @@ export default {
     signOut(){
       this.logOut()
       this.$router.push({name: 'home'})
+    },
+    openNotificationPane(){
+      this.$emit('toggle', 'notification')
     }
   }
 }
