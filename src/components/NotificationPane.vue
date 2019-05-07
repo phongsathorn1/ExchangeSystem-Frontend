@@ -1,19 +1,33 @@
 <template>
-  <div class="notification-overlay" :class="{'close-pane': close}" v-if="showPane">
+  <div class="notification" :class="{'close-pane': close}" v-if="showPane">
+    <div class="notification-overlay" @click="closePane"></div>
     <div id="notification-pane">
       <div class="notification-pane-title">
-        <div class="notification-pane-title-msg">การแจ้งเตือน</div>
+        <div class="notification-pane-title-msg">
+          การแจ้งเตือน
+          <span
+            class="notification-pane-count"
+          >({{ countNotifications() }} แจ้งเตือนใหม่)</span>
+        </div>
         <div class="notification-pane-title-button">
           <b-button @click="closePane">ปิด</b-button>
         </div>
         <div class="clearfix"></div>
       </div>
       <div class="main-notification-pane">
-        <div class="notification-card">
-          <div class="notification-card-title">ข้อเสนอที่คุณยื่นถูกตกลงรับแล้ว</div>
-          <div class="notification-card-content">ข้อเสนอที่คุณยื่นบลาๆๆๆๆๆๆ</div>
-          <div class="notification-card-time">9 วันที่แล้ว</div>
-        </div>
+        <div class="no-notification" v-if="!isHaveNotifications">ไม่มีการแจ้งเตือน</div>
+        <router-link :to="{name: 'deal-manager'}" v-else>
+          <div
+            class="notification-card"
+            v-for="notification in notifications"
+            :key="notification.id"
+            @click="closePane"
+          >
+            <div class="notification-card-title">{{ notification.title }}</div>
+            <div class="notification-card-content">{{ notification.message }}</div>
+            <div class="notification-card-time">{{ notification.created_date | moment("calendar") }}</div>
+          </div>
+        </router-link>
       </div>
     </div>
   </div>
@@ -25,8 +39,16 @@ export default {
   data() {
     return {
       close: true,
-      showPane: false
+      showPane: false,
+      notifications: null,
+      polling: null
     };
+  },
+  mounted() {
+    this.polling = setInterval(this.loadNotification, 15000);
+  },
+  beforeDestroy() {
+    clearInterval(this.polling);
   },
   methods: {
     closePane() {
@@ -37,6 +59,26 @@ export default {
       setTimeout(function() {
         self.showPane = false;
       }, 200);
+    },
+    async loadNotification() {
+      let response = await this.$axios.get("/notification/");
+      this.notifications = response.data.results;
+      this.countNotifications();
+      console.log(response);
+    },
+    countNotifications() {
+      let count = this.notifications.filter(x => !x.is_readed).length;
+      console.log(count);
+      this.$emit("notification-count", count);
+      return count;
+    }
+  },
+  computed: {
+    isHaveNotifications() {
+      if (this.notifications.length > 0) {
+        return true;
+      }
+      return false;
     }
   },
   watch: {
@@ -74,7 +116,7 @@ export default {
   transition: 0.5s;
 }
 
-.close-pane.notification-overlay {
+.close-pane .notification-overlay {
   background: rgba($color: #000000, $alpha: 0);
 }
 
@@ -129,6 +171,17 @@ export default {
 .notification-card-time {
   font-size: 0.9em;
   margin-top: 10px;
+}
+
+.notification-pane-count {
+  font-size: 0.8em;
+  font-weight: 400;
+}
+
+.main-notification-pane a,
+.main-notification-pane a:hover {
+  color: #000000;
+  text-decoration: none;
 }
 </style>
 

@@ -8,7 +8,7 @@
       <b-collapse id="nav-collapse" is-nav>
         <b-navbar-nav>
           <b-nav-item to="/">หน้าแรก</b-nav-item>
-          <b-nav-item to="/deal-manager">จัดการข้อเสนอ</b-nav-item>
+          <b-nav-item to="/deal-manager" v-if='user != null'>จัดการข้อเสนอ</b-nav-item>
         </b-navbar-nav>
 
         <b-navbar-nav class="ml-auto right-nav">
@@ -17,7 +17,7 @@
             <b-nav-item @click="openNotificationPane">
                 <div class="notification-btn">
                   <i class="icofont-notification"></i>
-                  <span class="notification-count">3</span>
+                  <span class="notification-count">{{ notiCount }}</span>
                 </div>
             </b-nav-item>
           </template>
@@ -31,7 +31,6 @@
             <b-dropdown-item :to="'/sign-in'">เข้าสู่ระบบ</b-dropdown-item>
             <b-dropdown-item :to="'/register'">สมัครสมาชิก</b-dropdown-item>
           </b-nav-item-dropdown>
-
         </b-navbar-nav>
       </b-collapse>
     </b-container>
@@ -43,6 +42,7 @@ import { mapGetters, mapActions } from 'vuex'
 
 export default {
 
+  props: ['notiCount'],
   computed: {
     ...mapGetters({
       user: 'getUser'
@@ -54,6 +54,7 @@ export default {
     }),
     signOut(){
       this.logOut()
+      this.$emit('logout')
       this.$router.push({name: 'home'})
     },
     openNotificationPane(){
