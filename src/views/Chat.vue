@@ -96,12 +96,12 @@ export default {
   methods: {
     async loadChats() {
       this.scrollToBottom();
-      let response = await this.$axios.get("/chat/20/");
+      let response = await this.$axios.get(`/chat/${this.$route.params.id}/`);
       this.chats = response.data;
       this.scrollToBottom();
     },
     async sendChat() {
-      let response = await this.$axios.post("/chat/20/", {
+      let response = await this.$axios.post(`/chat/${this.$route.params.id}/`, {
         message: this.message
       });
       this.loadChats();
