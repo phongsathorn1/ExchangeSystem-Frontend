@@ -9,6 +9,10 @@ import AddProduct from './views/AddProduct.vue'
 import Profile from './views/Profile.vue'
 import OfferDeal from './views/OfferDeal.vue'
 import DealManager from './views/DealManager.vue'
+import ChangeProfilePicture from './views/ChangeProfilePicture.vue'
+import Feedback from './views/Feedback.vue'
+import Chat from './views/Chat.vue'
+import Feedbacklist from './views/FeedbackList.vue'
 
 Vue.use(Router)
 
@@ -68,6 +72,26 @@ export default new Router({
       path: '/deal-manager',
       name: 'deal-manager',
       component: DealManager
+    },
+    {
+      path: '/profile/change-picture',
+      name: 'profile-change-picture',
+      component: ChangeProfilePicture
+    },
+    {
+      path: '/feedback',
+      name: 'feedback',
+      component: Feedback
+    },
+    {
+      path: '/chat/:id',
+      name: 'chat',
+      component: Chat
+    },
+    {
+      path: '/feedback/list',
+      name: 'feedback-list',
+      component: Feedbacklist
     }
   ]
 })

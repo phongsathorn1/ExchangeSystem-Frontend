@@ -10,6 +10,9 @@
                   <img :src="data.profile.picture" class="profile-image-raw">
                 </div>
               </div>
+              <div class="profile-button" v-if="getUser && getUser.id == data.profile.id">
+                <b-button :to="{name: 'profile-change-picture'}">แก้รูปโปรไฟล์</b-button>
+              </div>
             </b-col>
             <b-col md="9">
               <div class="profile-meta">
@@ -17,11 +20,11 @@
                   <b-col md="8">
                     <h3>{{ fullname }}</h3>
                   </b-col>
-                  <b-col md="4">
+                  <!-- <b-col md="4">
                     <div>
                       <b-button>แก้ไขโปรไฟล์</b-button>
                     </div>
-                  </b-col>
+                  </b-col> -->
                 </b-row>
                 <b-row>
                   <b-col sm="4">
@@ -162,6 +165,7 @@ export default {
   font-size: 1.2em;
   font-weight: 600;
   text-align: center;
+  border-bottom: 1px solid #e0e0e0;
 }
 
 .profile-meta-block .profile-meta-block-detail {
@@ -179,5 +183,10 @@ export default {
   border-bottom: 1px solid #e0e0e0;
   padding-bottom: 10px;
   margin-bottom: 20px;
+}
+
+.profile-button{
+  text-align: center;
+  margin: 25px 0;
 }
 </style>

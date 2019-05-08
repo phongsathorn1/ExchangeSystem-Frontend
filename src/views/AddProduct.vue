@@ -18,7 +18,12 @@
                       v-model="form.title"
                       placeholder="ชื่อสินค้า..."
                       class="product-title"
+                      :state="isValidate('title')"
                     ></b-form-input>
+                    <b-form-invalid-feedback
+                      v-if="errors.title"
+                      :state="isValidate('title')"
+                    >{{ errors.title }}</b-form-invalid-feedback>
                   </b-form-group>
 
                   <div class="product-meta">
@@ -29,12 +34,27 @@
                             v-model="form.category"
                             :options="categories"
                             id="category"
+                            :state="isValidate('category')"
                           ></b-form-select>
+                          <b-form-invalid-feedback
+                            v-if="errors.category"
+                            :state="isValidate('category')"
+                          >{{ errors.category }}</b-form-invalid-feedback>
                         </b-form-group>
                       </b-col>
                       <b-col md="6">
                         <b-form-group id="input-group-1" label="จำนวน:" label-for="quantity">
-                          <b-form-input type="number" v-model="form.quantity" id="quantity" min="1"></b-form-input>
+                          <b-form-input
+                            type="number"
+                            v-model="form.quantity"
+                            id="quantity"
+                            min="1"
+                            :state="isValidate('quantity')"
+                          ></b-form-input>
+                          <b-form-invalid-feedback
+                            v-if="errors.quantity"
+                            :state="isValidate('quantity')"
+                          >{{ errors.quantity }}</b-form-invalid-feedback>
                         </b-form-group>
                       </b-col>
                     </b-row>
@@ -45,7 +65,16 @@
                           label="สิ่งที่อยากได้:"
                           label-for="wantItem"
                         >
-                          <b-form-input type="text" v-model="form.wantItem" id="wantItem"></b-form-input>
+                          <b-form-input
+                            type="text"
+                            v-model="form.wantItem"
+                            id="wantItem"
+                            :state="isValidate('wantItem')"
+                          ></b-form-input>
+                          <b-form-invalid-feedback
+                            v-if="errors.wantItem"
+                            :state="isValidate('wantItem')"
+                          >{{ errors.wantItem }}</b-form-invalid-feedback>
                         </b-form-group>
                       </b-col>
                     </b-row>
@@ -56,6 +85,10 @@
                 <b-col md="12">
                   <h3>รายละเอียดของสินค้า</h3>
                   <b-form-group>
+                    <b-form-invalid-feedback
+                      v-if="errors.detail"
+                      :state="isValidate('detail')"
+                    >{{ errors.detail }}</b-form-invalid-feedback>
                     <vue-editor v-model="form.detail" :editorToolbar="editor.customToolbar"></vue-editor>
                   </b-form-group>
                 </b-col>
@@ -76,6 +109,7 @@
               </b-row>
               <b-row>
                 <b-col md="12" class="text-right">
+                  <span class="error" v-if="formError">กรุณากรอกรายละเอียดให้ครบ</span>
                   <b-button type="submit" variant="primary">เพิ่มสินค้า</b-button>
                 </b-col>
               </b-row>
@@ -115,7 +149,7 @@
 import { VueEditor } from "vue2-editor";
 import vue2Dropzone from "vue2-dropzone";
 import "vue2-dropzone/dist/vue2Dropzone.min.css";
-import { mapGetters } from 'vuex';
+import { mapGetters } from "vuex";
 
 import ProductOverview from "@/components/ProductOverview.vue";
 
@@ -138,6 +172,7 @@ export default {
       media_images: [],
       images_uuid: [],
       categories: [],
+      formError: false,
       editor: {
         customToolbar: [
           ["bold", "italic", "underline", "strike", "link"],
@@ -152,95 +187,137 @@ export default {
         acceptedFiles: "image/*",
         thumbnailMethod: "contain",
         addRemoveLinks: true,
-        thumbnailHeight: '300',
+        thumbnailHeight: "300",
         thumbnailWidth: null,
         dictDefaultMessage: "คลิกหรือลากไฟล์มาที่นี่เพื่ออัพโหลดรูปภาพ",
         dictCancelUpload: "หยุดอัพโหลด",
-        dictCancelUploadConfirmation: "คุณแน่ใจแล้วใช่หรือไม่ที่จะหยุดอัพโหลดรูปภาพนี้",
+        dictCancelUploadConfirmation:
+          "คุณแน่ใจแล้วใช่หรือไม่ที่จะหยุดอัพโหลดรูปภาพนี้",
         dictRemoveFile: "ลบรูปภาพ"
       },
-      previewMode: false
+      previewMode: false,
+      errors: {}
     };
   },
   created() {
-    this.getCategories()
-    this.imageUploadOption['headers'] = {"Authorization": `Bearer ${this.getUserToken}`}
+    this.getCategories();
+    this.imageUploadOption["headers"] = {
+      Authorization: `Bearer ${this.getUserToken}`
+    };
   },
   methods: {
     onSubmit() {
-      this.previewMode = true;
+      if (this.form.title == "") {
+        this.errors["title"] = "กรุณากรอกข้อมูล";
+      }
+      if (this.category == null) {
+        this.errors["category"] = "กรุณากรอกข้อมูล";
+      }
+      if (this.wantItem == null) {
+        this.errors["wantItem"] = "กรุณากรอกข้อมูล";
+      }
+      if (this.detail == null) {
+        this.errors["detail"] = "กรุณากรอกข้อมูล";
+      }
+      if (
+        this.form.title !== "" &&
+        this.category !== null &&
+        this.wantItem !== null &&
+        this.detail !== null
+      ) {
+        this.previewMode = true;
+        this.formError = false;
+      } else {
+        this.previewMode = false;
+        this.formError = true;
+      }
+    },
+    isValidate(field) {
+      if (Object.keys(this.errors).length !== 0) {
+        if (this.errors[field]) {
+          return false;
+        } else {
+          return true;
+        }
+      }
+      return null;
     },
     onClickBack() {
       this.previewMode = false;
     },
     onConfirmSubmit() {
-      this.submitProduct()
+      this.submitProduct();
       // this.$router.push("/");
     },
     async getCategories() {
       try {
-        let response = await this.$axios.get('/category/')
-        let categories = [{
-          text: 'เลือกหมวดหมู่สินค้า',
-          value: null
-        }]
-        
+        let response = await this.$axios.get("/category/");
+        let categories = [
+          {
+            text: "เลือกหมวดหมู่สินค้า",
+            value: null
+          }
+        ];
+
         response.data.results.forEach(category => {
           categories.push({
             text: category.name,
             value: category.id
-          })
+          });
         });
 
-        this.categories = categories
-
-      } catch(error) {
-        console.log(error)
+        this.categories = categories;
+      } catch (error) {
+        console.log(error);
       }
     },
     async submitProduct() {
       try {
-        let response = await this.$axios.post('/product/', {
+        let response = await this.$axios.post("/product/", {
           name: this.form.title,
           category_id: this.form.category,
           detail: this.form.detail,
           quantity: this.form.quantity,
           want_product: this.form.wantItem,
           images_id: this.form.images
-        })
+        });
 
-        console.log(response.data)
-        this.$router.push({name: 'product', params: {id: response.data.id}})
-
-      } catch(error) {
-        console.log(error.response)
+        console.log(response.data);
+        this.$router.push({
+          name: "product",
+          params: { id: response.data.id }
+        });
+      } catch (error) {
+        console.log(error.response);
       }
     },
-    imageUploadSuccess(file, response){
-      this.form.images.push(response.id)
+    imageUploadSuccess(file, response) {
+      this.form.images.push(response.id);
       this.images_uuid.push({
-        'file_uid': file.upload.uuid,
-        'id': response.id
-      })
+        file_uid: file.upload.uuid,
+        id: response.id
+      });
       this.media_images.push({
         picture_path: response.picture_path
-      })
-      console.log(response)
+      });
+      console.log(response);
     },
-    imageUploadRemove(file, error, xhr){
+    imageUploadRemove(file, error, xhr) {
       if (!this.previewMode) {
-        let image_uuid_index = this.images_uuid.findIndex((x) => x.file_uid == file.upload.uuid)
-        let image_upload_id = this.form.images.indexOf(this.images_uuid[image_uuid_index].id)
-        this.form.images.splice(image_upload_id, 1)
-        this.images_uuid.splice(image_uuid_index, 1)
-        console.log(file)
+        let image_uuid_index = this.images_uuid.findIndex(
+          x => x.file_uid == file.upload.uuid
+        );
+        let image_upload_id = this.form.images.indexOf(
+          this.images_uuid[image_uuid_index].id
+        );
+        this.form.images.splice(image_upload_id, 1);
+        this.images_uuid.splice(image_uuid_index, 1);
+        console.log(file);
       }
     }
   },
   computed: {
-    ...mapGetters([
-      'getUserToken'
-    ])
+    ...mapGetters(["getUserToken"])
   }
 };
 </script>
@@ -291,8 +368,8 @@ export default {
   overflow: hidden;
 }
 
-.image-upload>.dz-preview .dz-details {
-    background-color: rgba($color: $primary-light-color, $alpha: 0.6);
+.image-upload > .dz-preview .dz-details {
+  background-color: rgba($color: $primary-light-color, $alpha: 0.6);
 }
 </style>
 

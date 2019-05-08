@@ -23,7 +23,13 @@
             :key="notification.id"
             @click="closePane"
           >
-            <div class="notification-card-title">{{ notification.title }}</div>
+            <div class="notification-card-title" @click="handleClick(notification.id)">
+              <template v-if="!notification.is_readed">
+                <i class="notification-dot"></i>
+                <span class="notification-new-label">ใหม่</span>
+              </template>
+              <span>{{ notification.title }}</span>
+            </div>
             <div class="notification-card-content">{{ notification.message }}</div>
             <div class="notification-card-time">{{ notification.created_date | moment("calendar") }}</div>
           </div>
@@ -34,6 +40,8 @@
 </template>
 
 <script>
+import { mapGetters } from "vuex";
+
 export default {
   props: ["show"],
   data() {
@@ -45,6 +53,7 @@ export default {
     };
   },
   mounted() {
+    this.loadNotification();
     this.polling = setInterval(this.loadNotification, 15000);
   },
   beforeDestroy() {
@@ -58,22 +67,32 @@ export default {
       this.close = true;
       setTimeout(function() {
         self.showPane = false;
-      }, 200);
+      }, 1000);
     },
     async loadNotification() {
-      let response = await this.$axios.get("/notification/");
-      this.notifications = response.data.results;
-      this.countNotifications();
-      console.log(response);
+      if (this.getUser) {
+        let response = await this.$axios.get("/notification/");
+        this.notifications = response.data.results;
+        this.countNotifications();
+      }
     },
     countNotifications() {
       let count = this.notifications.filter(x => !x.is_readed).length;
-      console.log(count);
       this.$emit("notification-count", count);
       return count;
+    },
+    async handleClick(notificationId) {
+      let response = await this.$axios.post(`/notification/${notificationId}/`);
+      this.notifications.forEach(x => {
+        if (x.id == notificationId) {
+          x.is_readed = true;
+        }
+      });
+      console.log(response.data);
     }
   },
   computed: {
+    ...mapGetters(["getUser"]),
     isHaveNotifications() {
       if (this.notifications.length > 0) {
         return true;
@@ -84,16 +103,17 @@ export default {
   watch: {
     show() {
       let self = this;
+      this.loadNotification();
       if (this.show) {
         this.showPane = this.show;
         setTimeout(function() {
           self.close = !self.show;
-        }, 200);
+        }, 1000);
       } else {
         this.close = !this.show;
         setTimeout(function() {
           self.showPane = self.show;
-        }, 200);
+        }, 1000);
       }
     }
   }
@@ -113,7 +133,7 @@ export default {
   z-index: 999;
   box-shadow: -4px 0px 12px 1px rgba($color: #000000, $alpha: 0.3);
   overflow-x: hidden;
-  transition: 0.5s;
+  transition: 0.4s ease;
 }
 
 .close-pane .notification-overlay {
@@ -121,7 +141,7 @@ export default {
 }
 
 .close-pane #notification-pane {
-  right: -500px;
+  right: -550px;
 }
 
 .notification-overlay {
@@ -131,7 +151,7 @@ export default {
   position: absolute;
   z-index: 199;
   top: 0px;
-  transition: 0.5s;
+  transition: 0.4s;
 }
 
 .notification-pane-title {
@@ -148,6 +168,8 @@ export default {
 .notification-card {
   border: 1px solid #e0e0e0;
   padding: 20px;
+  margin: 10px 0px;
+  border-radius: 5px;
 }
 
 .notification-card-title {
@@ -182,6 +204,21 @@ export default {
 .main-notification-pane a:hover {
   color: #000000;
   text-decoration: none;
+}
+
+.notification-dot {
+  height: 10px;
+  width: 10px;
+  background-color: #3789b4;
+  display: inline-block;
+  border-radius: 50%;
+  margin-right: 5px;
+}
+
+.notification-new-label {
+  color: #3789b4;
+  font-size: 0.8em;
+  margin: 0px 5px;
 }
 </style>
 

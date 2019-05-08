@@ -118,7 +118,6 @@
         </b-row>
       </b-container>
     </div>
-    {{ selected }}
   </div>
 </template>
 
@@ -130,7 +129,8 @@ export default {
       avaliable_offer_products: null,
       selected: [],
       previewMode: false,
-      data: []
+      data: [],
+      errors: []
     };
   },
   mounted() {

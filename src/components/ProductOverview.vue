@@ -4,7 +4,11 @@
       <b-col md="5">
         <div class="product-images-wrapper">
           <template v-if="hasImages()">
-            <img :src="images[0].picture_path">
+            <div class="image-slider-container">
+              <slick ref="slick" :options="slickOptions">
+                <img :src="image.picture_path" v-for="image in images" :key="image.picture_path">
+              </slick>
+            </div>
           </template>
         </div>
       </b-col>
@@ -13,11 +17,19 @@
         <div class="product-meta">
           <b-row>
             <b-col cols="12" class="product-owner">
-              <b>สร้างโดย </b> <router-link :to="{name: 'profile-user', params:{id: owner.id}}"  v-if="owner">{{ fullName }}</router-link>
+              <b>สร้างโดย</b>
+              <router-link
+                :to="{name: 'profile-user', params:{id: owner.id}}"
+                v-if="owner"
+              > {{ fullName }}</router-link>
+              <router-link
+                :to="{name: 'profile-user', params:{id: getUser.id}}"
+                v-if="!owner && getUser"
+              > {{ getUser.first_name }} {{ getUser.last_name }}</router-link>
             </b-col>
           </b-row>
-          <b-row>
-            <div class="product-status">
+          <b-row v-if="id">
+            <div class="product-status" v-if="getUser && owner.id != getUser.id">
               <span class="product-ready product-status-flag">พร้อมให้ยื่นข้อเสนอ</span>
             </div>
           </b-row>
@@ -37,8 +49,9 @@
               {{ wantItem }}
             </b-col>
           </b-row>
-          <div class="product-control">
-            <b-button :to="`/create-offer/${id}`" variant="success">ยื่นข้อเสนอ</b-button>
+          <div class="product-control" v-if="id" >
+            <b-button variant="danger" v-if="getUser && getUser.is_staff" @click="deleteProduct(id)">ลบสินค้า</b-button>
+            <b-button :to="`/create-offer/${id}`" variant="success" v-if="getUser && owner.id != getUser.id">ยื่นข้อเสนอ</b-button>
           </div>
         </div>
       </b-col>
@@ -55,8 +68,26 @@
 </template>
 
 <script>
+import Slick from "vue-slick";
+import "@/../node_modules/slick-carousel/slick/slick.css";
+import "@/../node_modules/slick-carousel/slick/slick-theme.css";
+import { mapGetters } from "vuex";
+
 export default {
   name: "product-overview",
+  components: {
+    Slick
+  },
+  data() {
+    return {
+      slickOptions: {
+        arrows: true,
+        dots: true,
+        draggable: true,
+        infinite: false
+      }
+    };
+  },
   props: [
     "id",
     "title",
@@ -68,6 +99,7 @@ export default {
     "owner"
   ],
   computed: {
+    ...mapGetters(["getUser"]),
     fullName() {
       if (this.owner) {
         return this.owner.first_name + " " + this.owner.last_name;
@@ -76,16 +108,22 @@ export default {
     }
   },
   methods: {
-    hasImages(){
-      console.log(this.images)
-      if(this.images == null){
-        return false
-      }else{
-        if(this.images.length > 0){
-          return true
+    hasImages() {
+      console.log(this.images);
+      if (this.images == null) {
+        return false;
+      } else {
+        if (this.images.length > 0) {
+          return true;
         }
       }
-      return false
+      return false;
+    },
+    async deleteProduct(id){
+      if(window.confirm("คุณต้องการลบสินค้าชิ้นนี้หรือไม่")){
+        let response = await this.$axios.delete(`/product/${id}`)
+        this.$route.push('/')
+      }
     }
   }
 };
@@ -139,11 +177,11 @@ export default {
   padding: 20px 0;
 }
 
-.product-control .btn{
-  margin: 0;
+.product-control .btn {
+  margin: 0px 10px;
 }
 
-.product-owner b{
+.product-owner b {
   font-weight: 600;
 }
 
@@ -155,5 +193,20 @@ export default {
 <style lang="scss">
 .product-detail .product-detail-text p {
   margin-bottom: 0.5rem;
+}
+
+.slick-prev:before,
+.slick-next:before {
+  color: #ffffff !important;
+  font-size: 30px;
+}
+
+.slick-next {
+  right: 20px;
+}
+
+.slick-prev {
+  left: 10px;
+  z-index: 60;
 }
 </style>

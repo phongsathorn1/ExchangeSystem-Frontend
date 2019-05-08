@@ -5,12 +5,18 @@
       <b-row>
         <b-col md="6">
           <b-form-group id="input-group-1" label="ชื่อ" label-for="firstname">
-            <b-form-input id="firstname" v-model="form.firstname" type="text" required></b-form-input>
+            <b-form-input id="firstname" v-model="form.firstname" type="text" :state="isValidate('first_name')"></b-form-input>
+            <b-form-invalid-feedback v-for="error in errors.email" :key="error" :state="isValidate('first_name')">
+              {{ error }}
+            </b-form-invalid-feedback>
           </b-form-group>
         </b-col>
         <b-col md="6">
           <b-form-group id="input-group-2" label="นามสกุล" label-for="lastname">
-            <b-form-input id="lastname" v-model="form.lastname" type="text" required></b-form-input>
+            <b-form-input id="lastname" v-model="form.lastname" type="text" :state="isValidate('last_name')"></b-form-input>
+            <b-form-invalid-feedback v-for="error in errors.last_name" :key="error" :state="isValidate('last_name')">
+              {{ error }}
+            </b-form-invalid-feedback>
           </b-form-group>
         </b-col>
         <b-col sm="6">
@@ -20,19 +26,28 @@
               v-model="form.gender"
               :options="gender"
               class="primary-select"
-              required
+              :state="isValidate('gender')"
             ></b-form-select>
+            <b-form-invalid-feedback v-for="error in errors.gender" :key="error" :state="isValidate('gender')">
+              {{ error }}
+            </b-form-invalid-feedback>
           </b-form-group>
         </b-col>
         <b-col sm="6">
-          <b-form-group id="input-group-2" label="วันเกิด" label-for="age">
-            <b-form-input id="age" v-model="form.age" type="date" required></b-form-input>
+          <b-form-group id="input-group-2" label="วันเกิด" label-for="birthday">
+            <b-form-input id="birthday" v-model="form.birthday" type="date" :state="isValidate('birthday')"></b-form-input>
+             <b-form-invalid-feedback v-for="error in errors.birthday" :key="error" :state="isValidate('birthday')">
+              {{ error }}
+            </b-form-invalid-feedback>
           </b-form-group>
         </b-col>
         <b-col md="6"></b-col>
         <b-col md="12">
           <b-form-group id="input-group-3" label="อีเมลล์ (Email)" label-for="email">
-            <b-form-input id="email" v-model="form.email" type="email" required></b-form-input>
+            <b-form-input id="email" v-model="form.email" type="email" :state="isValidate('email')"></b-form-input>
+            <b-form-invalid-feedback v-for="error in errors.email" :key="error" :state="isValidate('email')">
+              {{ error }}
+            </b-form-invalid-feedback>
           </b-form-group>
         </b-col>
         <b-col md="12">
@@ -50,10 +65,17 @@
                     type="text"
                     placeholder="0812345678"
                     :disabled="form.firebase_uid != ''"
-                    required
+                    :state="isValidate('phone') && isValidate('firebase_uid')"
                   ></b-form-input>
+                  <b-form-invalid-feedback v-for="error in errors.phone" :key="error" :state="isValidate('phone')">
+                    {{ error }}
+                  </b-form-invalid-feedback>
+                  <b-form-invalid-feedback :state="isValidate('firebase_uid')">
+                    กรุณายืนยันเบอร์โทรศัพท์ของคุณ
+                  </b-form-invalid-feedback>
                 </b-input-group>
               </b-form-group>
+              <span v-if="waitingOTP"><b-spinner type="grow" label="Loading..."></b-spinner> กำลังส่งรหัส OTP ไปที่เบอร์โทรศัพท์...</span>
             </b-col>
             <b-col md="4" class="d-flex align-items-end">
               <b-form-group>
@@ -67,8 +89,12 @@
             <b-row>
               <b-col sm="7">
                 <b-form-group id="input-group-4" label="OTP Code" label-for="otp">
-                  <b-form-input id="otp" v-model="form.otp" type="text" required></b-form-input>
+                  <b-form-input id="otp" v-model="form.otp" type="text" :state="otpValidate()"></b-form-input>
+                  <b-form-invalid-feedback :state="otpValidate()">
+                    รหัส OTP ไม่ถูกต้อง
+                  </b-form-invalid-feedback>
                 </b-form-group>
+                <span v-if="validatingOTP">กำลังยืนยันรหัส OTP</span>
               </b-col>
               <b-col sm="5" class="d-flex align-items-end">
                 <b-form-group>
@@ -80,15 +106,21 @@
         </b-col>
         <b-col md="7">
           <b-form-group id="input-group-4" label="รหัสผ่าน" label-for="password">
-            <b-form-input id="password" v-model="form.password" type="password" required></b-form-input>
+            <b-form-input id="password" v-model="form.password" type="password" :state="isValidate('password')"></b-form-input>
+            <b-form-invalid-feedback v-for="error in errors.password" :key="error" :state="isValidate('password')">
+              {{ error }}
+            </b-form-invalid-feedback>
           </b-form-group>
           <b-form-group id="input-group-4" label="รหัสผ่าน" label-for="password_confirmation">
             <b-form-input
               id="password_confirmation"
               v-model="form.password_confirmation"
               type="password"
-              required
+              :state="passwordValidate()"
             ></b-form-input>
+            <b-form-invalid-feedback :state="passwordValidate()">
+              รหัสผ่านไม่ตรงกัน
+            </b-form-invalid-feedback>
           </b-form-group>
         </b-col>
         <b-col md="5">
@@ -131,6 +163,7 @@ export default {
         email: "",
         phone: "",
         otp: "",
+        birthday: null,
         password: "",
         password_confirmation: "",
         firebase_uid: ""
@@ -141,7 +174,13 @@ export default {
           { text: "หญิง", value: 'M' }, 
           { text: "อื่นๆ", value: 'X' }, 
         ],
-      showOTP: false
+      showOTP: false,
+      waitingOTP: false,
+      validatingOTP: false,
+      otpError: null,
+      errors: {
+        
+      }
     };
   },
   mounted() {
@@ -169,21 +208,28 @@ export default {
           last_name: this.form.lastname,
           password: this.form.password,
           phone: this.phoneWithZeroPrepare,
-          firebase_uid: this.form.firebase_uid
+          firebase_uid: this.form.firebase_uid,
+          gender: this.form.gender,
+          birthday: this.form.birthday
         });
 
         this.$store.commit('setUserToken', response.data.token)
         this.$store.commit('setUser', response.data)
         this.$emit('submit', self.form)
+        this.loadUser()
 
       } catch (error) {
-          console.log(error)
-          console.log(error.response)
+        console.log(error.response)
+          if(error.response.status == 400){
+            this.errors = error.response.data
+            console.log('ok')
+          }
       }
     },
     onRequestOTP() {
       let appVerifier = window.recaptchaVerifier;
       let self = this;
+      this.waitingOTP = true
       firebase
         .auth()
         .signInWithPhoneNumber(this.phoneWithCountryCode, appVerifier)
@@ -191,6 +237,7 @@ export default {
           window.confirmationResult = confirmationResult;
           console.log(confirmationResult);
           self.showOTP = true;
+          self.waitingOTP = false
         })
         .catch(function(error) {
           // Error; SMS not sent
@@ -201,17 +248,46 @@ export default {
           //   });
         });
     },
-    onConfirmOTP() {
-      var credential = firebase.auth.PhoneAuthProvider.credential(
-        confirmationResult.verificationId,
-        this.form.otp
-      );
-      firebase.auth().signInAndRetrieveDataWithCredential(credential);
-      this.form.firebase_uid = firebase.auth().currentUser.uid;
-
-      //For debugging
-      console.log(credential);
-      console.log(firebase.auth().currentUser.uid);
+    async onConfirmOTP() {
+      try{
+        var credential = firebase.auth.PhoneAuthProvider.credential(
+          confirmationResult.verificationId,
+          this.form.otp
+        )
+        await firebase.auth().signInAndRetrieveDataWithCredential(credential);
+        this.form.firebase_uid = firebase.auth().currentUser.uid;
+        console.log(credential);
+        console.log(firebase.auth().currentUser.uid);
+        this.otpError = false
+      }
+      catch (error) {
+        this.otpError = true
+      }
+      this.validatingOTP = false
+    },
+    otpValidate(){
+      if(this.otpError){
+        return false
+      }
+      if(this.form.firebase_uid !== ''){
+        return true
+      }
+      return null
+    },
+    isValidate(field){
+      if(Object.keys(this.errors).length !== 0){
+        if(this.errors[field]){
+          return false
+        }else{
+          return true
+        }
+      }
+      return null
+    },
+    passwordValidate(){
+      if(this.form.password != '' && this.form.password_confirmation != ''){
+        return this.form.password_confirmation === this.form.password
+      }
     }
   },
   computed: {

@@ -67,6 +67,12 @@
                         <span class="sub-item-name">(จำนวน {{ deal_off.quantity }})</span>
                       </li>
                     </ul>
+                    <span class="deal-profile-meta">
+                      โดย
+                      <router-link v-if="receive_deal.deal_offer[0]">
+                        :to="{name: 'profile', params: {id: receive_deal.product.owner.id}}"
+                      >{{receive_deal.deal_offer[0].offer_product.owner.first_name}} {{receive_deal.deal_offer[0].offer_product.owner.last_name}}</router-link>
+                    </span>
                   </b-col>
                   <b-col cols="4">
                     <div class="deal-item-control">
@@ -81,6 +87,7 @@
                       >กำลังรอให้ผู้ยื่นข้อเสนอทำการตอบรับ</waiting-status>
 
                       <template v-if="receive_deal.owner_accept && receive_deal.offerer_accept">
+                        <b-button @click="openChat(receive_deal)" variant="info">แชท</b-button>
                         <b-button
                           @click="setScoreForm(receive_deal.id)"
                           v-b-modal.score-box
@@ -112,6 +119,11 @@
                         </router-link>
                       </li>
                     </ul>
+                    <span class="deal-profile-meta">โดย <router-link v-if="offer_deal.deal_offer[0]"
+                        :to="{name: 'profile', params: {id: offer_deal.product.owner.id}}"
+                      >{{offer_deal.deal_offer[0].offer_product.owner.first_name}} {{offer_deal.deal_offer[0].offer_product.owner.last_name}}
+                      </router-link>
+                    </span>
                   </b-col>
                   <b-col cols="4">
                     <div class="deal-item-control">
@@ -131,7 +143,11 @@
                       </div>
 
                       <template v-if="offer_deal.owner_accept && offer_deal.offerer_accept">
-                        <b-button @click="setScoreForm(offer_deal.id)" v-b-modal.score-box>ให้คะแนนการแลกเปลี่ยนครั้งนี้</b-button>
+                        <b-button @click="openChat(offer_deal)" variant="info">แชท</b-button>
+                        <b-button
+                          @click="setScoreForm(offer_deal.id)"
+                          v-b-modal.score-box
+                        >ให้คะแนนการแลกเปลี่ยนครั้งนี้</b-button>
                       </template>
                     </div>
                   </b-col>
@@ -185,7 +201,7 @@ export default {
       this.datas = response.data;
     },
     async ownerAccept(deal) {
-      let response = await this.$axios.post(`deal/accept/${deal.id}`);
+      let response = await this.$axios.post(`deal/accept/${deal.id}/`);
 
       if (this.findDealIndexInOffersDeal(deal) != null) {
         let index = this.findDealIndexInOffersDeal(deal);
@@ -240,6 +256,11 @@ export default {
         score: this.scoreForm.score
       });
       console.log(response);
+    },
+
+    openChat(deal) {
+      console.log(deal)
+      let myWindow = window.open(`/chat/${deal.id}/`, "", "width=500,height=800");
     }
   },
   watch: {
@@ -356,5 +377,9 @@ export default {
 
 .waiting-status .waiting-msg {
   margin-left: 15px;
+}
+
+.deal-profile-meta{
+  margin-left: 25px;
 }
 </style>

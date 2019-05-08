@@ -69,10 +69,8 @@ export default {
 @import "@/assets/custom.scss";
 
 .profile-picture {
-  min-height: 200px;
-  min-width: 200px;
-  max-height: 300px;
-  max-width: 300px;
+  width: 300px;
+  height: 300px;
   background: #e0e0e0;
   border-radius: 50%;
   margin: auto;

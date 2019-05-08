@@ -9,6 +9,8 @@
         <b-navbar-nav>
           <b-nav-item to="/">หน้าแรก</b-nav-item>
           <b-nav-item to="/deal-manager" v-if='user != null'>จัดการข้อเสนอ</b-nav-item>
+          <b-nav-item :to="{name: 'feedback'}">แจ้งปัญหาการใช้งาน</b-nav-item>
+          <b-nav-item :to="{name: 'feedback-list'}" v-if="user != null && user.is_staff">ดูรายงานปัญหาการใช้งาน</b-nav-item>
         </b-navbar-nav>
 
         <b-navbar-nav class="ml-auto right-nav">
@@ -56,6 +58,7 @@ export default {
       this.logOut()
       this.$emit('logout')
       this.$router.push({name: 'home'})
+      location.reload();
     },
     openNotificationPane(){
       this.$emit('toggle', 'notification')
