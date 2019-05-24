@@ -125,7 +125,8 @@
         </b-col>
         <b-col md="5">
           <div id="recaptcha-container"></div>
-          <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Alias quidem ad doloribus assumenda officia eius consequatur. Minima, deserunt, excepturi eos ea pariatur voluptates animi aspernatur at sit eaque deleniti et!</p>
+          <br>
+          <p>การตั้งรหัสผ่านที่ดี ควรมีความยาวมากกว่า 6 ตัวอักษร มีการผสมตัวอักษร [A-z] และอักขระพิเศษอื่นๆ (! . _ -)</p>
         </b-col>
       </b-row>
       <b-col md="12">
