@@ -77,15 +77,15 @@
                   <b-col cols="4">
                     <div class="deal-item-control">
                       <b-button
-                        variant="danger"
-                        @click="cancelDeal(receive_deal)"
-                        v-if="receive_deal.owner_accept == null"
-                      >ยกเลิก</b-button>
-                      <b-button
                         variant="success"
                         @click="ownerAccept(receive_deal)"
                         v-if="receive_deal.owner_accept == null"
                       >รับข้อเสนอ</b-button>
+                      <b-button
+                        variant="danger"
+                        @click="cancelDeal(receive_deal)"
+                        v-if="receive_deal.owner_accept == null"
+                      >ยกเลิก</b-button>
 
                       <waiting-status
                         v-if="receive_deal.owner_accept && receive_deal.offerer_accept == null"
@@ -94,9 +94,15 @@
                       <template v-if="receive_deal.owner_accept && receive_deal.offerer_accept">
                         <b-button @click="openChat(receive_deal)" variant="info">แชท</b-button>
                         <b-button
+                          variant="success"
+                          :disabled="receive_deal.offerer_score != null"
                           @click="setScoreForm(receive_deal.id)"
                           v-b-modal.score-box
-                        >ให้คะแนนการแลกเปลี่ยนครั้งนี้</b-button>
+                        >ยืนยันดีลนี้</b-button>
+                        <b-button
+                          variant="danger"
+                          @click="cancelDeal(receive_deal)"
+                        >ยกเลิก</b-button>
                       </template>
                     </div>
                   </b-col>
@@ -145,14 +151,25 @@
                           variant="success"
                           @click="ownerAccept(offer_deal)"
                         >ยืนยันรับข้อเสนอ</b-button>
+                        <b-button
+                          variant="danger"
+                          @click="cancelDeal(receive_deal)"
+                          v-if="receive_deal.owner_accept == null"
+                        >ยกเลิก</b-button>
                       </div>
 
                       <template v-if="offer_deal.owner_accept && offer_deal.offerer_accept">
                         <b-button @click="openChat(offer_deal)" variant="info">แชท</b-button>
                         <b-button
+                          variant="success"
+                          :disabled="offer_deal.owner_score != null"
                           @click="setScoreForm(offer_deal.id)"
                           v-b-modal.score-box
-                        >ให้คะแนนการแลกเปลี่ยนครั้งนี้</b-button>
+                        >ยืนยันดีลนี้</b-button>
+                        <b-button
+                          variant="danger"
+                          @click="cancelDeal(offer_deal)"
+                        >ยกเลิก</b-button>
                       </template>
                     </div>
                   </b-col>
