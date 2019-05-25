@@ -12,7 +12,7 @@
           <b-nav-item :to="{name: 'feedback'}">แจ้งปัญหาการใช้งาน</b-nav-item>
           <template v-if="user != null && user.is_staff">
             <b-nav-item :to="{name: 'feedback-list'}">ดูรายงานปัญหาการใช้งาน</b-nav-item>
-            <b-nav-item :to="getAPIRoot+'/admin/exchange/category/'">เพิ่มหมวดหมู่สินค้า</b-nav-item>
+            <b-nav-item :href="getAPIRoot+'/admin/exchange/category/'">เพิ่มหมวดหมู่สินค้า</b-nav-item>
           </template>
         </b-navbar-nav>
 
@@ -51,7 +51,10 @@ export default {
   computed: {
     ...mapGetters({
       user: 'getUser'
-    })
+    }),
+    getAPIRoot() {
+      return process.env.VUE_APP_API_ROOT;
+    }
   },
   methods: {
     ...mapActions({
@@ -65,11 +68,6 @@ export default {
     },
     openNotificationPane(){
       this.$emit('toggle', 'notification')
-    }
-  },
-  computed: {
-    getAPIRoot() {
-      return process.env.VUE_APP_API_ROOT;
     }
   }
 }
