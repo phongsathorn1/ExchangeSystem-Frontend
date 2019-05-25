@@ -69,13 +69,18 @@
                     </ul>
                     <span class="deal-profile-meta">
                       โดย
-                      <router-link v-if="receive_deal.deal_offer[0]">
+                      <router-link v-if="receive_deal.deal_offer[0]"
                         :to="{name: 'profile', params: {id: receive_deal.product.owner.id}}"
                       >{{receive_deal.deal_offer[0].offer_product.owner.first_name}} {{receive_deal.deal_offer[0].offer_product.owner.last_name}}</router-link>
                     </span>
                   </b-col>
                   <b-col cols="4">
                     <div class="deal-item-control">
+                      <b-button
+                        variant="danger"
+                        @click="cancelDeal(receive_deal)"
+                        v-if="receive_deal.owner_accept == null"
+                      >ยกเลิก</b-button>
                       <b-button
                         variant="success"
                         @click="ownerAccept(receive_deal)"
@@ -249,6 +254,12 @@ export default {
 
     setScoreForm(dealId) {
       this.scoreForm.dealId = dealId;
+    },
+
+    async cancelDeal(deal){
+      let response = await this.$axios.delete(`deal/${deal.id}/`)
+      console.log(response)
+      this.loadProduct()
     },
 
     async handleOk(deal) {
