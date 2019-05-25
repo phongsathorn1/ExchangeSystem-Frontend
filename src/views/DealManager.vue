@@ -154,8 +154,7 @@
                         >ยืนยันรับข้อเสนอ</b-button>
                         <b-button
                           variant="danger"
-                          @click="cancelDeal(receive_deal)"
-                          v-if="receive_deal.owner_accept == null"
+                          @click="cancelDeal(offer_deal)"
                         >ยกเลิก</b-button>
                       </div>
 
@@ -285,6 +284,7 @@ export default {
       let response = await this.$axios.post(`deal/${deal.dealId}/score/`, {
         score: this.scoreForm.score
       });
+      this.loadProduct()
       console.log(response);
     },
 
