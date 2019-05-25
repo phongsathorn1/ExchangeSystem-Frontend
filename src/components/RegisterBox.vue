@@ -94,7 +94,7 @@
                     รหัส OTP ไม่ถูกต้อง
                   </b-form-invalid-feedback>
                 </b-form-group>
-                <span v-if="validatingOTP">กำลังยืนยันรหัส OTP</span>
+                <span v-if="validatingOTP"><b-spinner variant="success" label="Spinning"></b-spinner> กำลังยืนยันรหัส OTP</span>
               </b-col>
               <b-col sm="5" class="d-flex align-items-end">
                 <b-form-group>
@@ -144,12 +144,12 @@ import axios from "axios";
 import { constants } from "crypto";
 
 const config = {
-  apiKey: "AIzaSyBLLAHvo386Ip9lsyyzmv5jjWtzHl3lIGE",
-  authDomain: "exchangesystem-58880.firebaseapp.com",
-  databaseURL: "https://exchangesystem-58880.firebaseio.com",
-  projectId: "exchangesystem-58880",
-  storageBucket: "exchangesystem-58880.appspot.com",
-  messagingSenderId: "271076867854"
+  apiKey: process.env.VUE_APP_FIREBASE_API_KEY,
+  authDomain: process.env.VUE_APP_FIREBASE_AUTHDOMAIN,
+  databaseURL: process.env.VUE_APP_FIREBASE_DATABASEURL,
+  projectId: process.env.VUE_APP_FIREBASE_PROJECT_ID,
+  storageBucket: process.env.VUE_APP_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: process.env.VUE_APP_FIREBASE_MESSAGINGSENDERID
 };
 
 firebase.initializeApp(config);
@@ -250,6 +250,7 @@ export default {
         });
     },
     async onConfirmOTP() {
+      this.validatingOTP = true
       try{
         var credential = firebase.auth.PhoneAuthProvider.credential(
           confirmationResult.verificationId,
