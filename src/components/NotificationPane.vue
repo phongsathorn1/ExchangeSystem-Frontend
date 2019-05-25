@@ -16,14 +16,14 @@
       </div>
       <div class="main-notification-pane">
         <div class="no-notification" v-if="!isHaveNotifications">ไม่มีการแจ้งเตือน</div>
-        <router-link :to="{name: 'deal-manager'}" v-else>
+        <!-- <router-link :to="{name: 'deal-manager'}" v-else> -->
           <div
             class="notification-card"
             v-for="notification in notifications"
             :key="notification.id"
-            @click="closePane"
+            @click="handleClick(notification.id)"
           >
-            <div class="notification-card-title" @click="handleClick(notification.id)">
+            <div class="notification-card-title">
               <template v-if="!notification.is_readed">
                 <i class="notification-dot"></i>
                 <span class="notification-new-label">ใหม่</span>
@@ -33,7 +33,7 @@
             <div class="notification-card-content">{{ notification.message }}</div>
             <div class="notification-card-time">{{ notification.created_date | moment("calendar") }}</div>
           </div>
-        </router-link>
+        <!-- </router-link> -->
       </div>
     </div>
   </div>
@@ -70,11 +70,9 @@ export default {
       }, 1000);
     },
     async loadNotification() {
-      if (this.getUser) {
-        let response = await this.$axios.get("/notification/");
-        this.notifications = response.data.results;
-        this.countNotifications();
-      }
+      let response = await this.$axios.get("/notification/");
+      this.notifications = response.data.results;
+      this.countNotifications();
     },
     countNotifications() {
       let count = this.notifications.filter(x => !x.is_readed).length;
@@ -88,7 +86,8 @@ export default {
           x.is_readed = true;
         }
       });
-      console.log(response.data);
+      this.closePane()
+      this.$router.push({name: 'deal-manager'})
     }
   },
   computed: {
@@ -170,6 +169,7 @@ export default {
   padding: 20px;
   margin: 10px 0px;
   border-radius: 5px;
+  cursor: pointer;
 }
 
 .notification-card-title {
