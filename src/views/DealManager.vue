@@ -101,6 +101,7 @@
                         >ยืนยันดีลนี้</b-button>
                         <b-button
                           variant="danger"
+                          :disabled="receive_deal.owner_score != null && receive_deal.offerer_score != null"
                           @click="cancelDeal(receive_deal)"
                         >ยกเลิก</b-button>
                       </template>
@@ -168,6 +169,7 @@
                         >ยืนยันดีลนี้</b-button>
                         <b-button
                           variant="danger"
+                          :disabled="offer_deal.owner_score != null && offer_deal.offerer_score != null"
                           @click="cancelDeal(offer_deal)"
                         >ยกเลิก</b-button>
                       </template>
