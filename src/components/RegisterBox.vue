@@ -142,6 +142,7 @@
 import firebase from "firebase";
 import axios from "axios";
 import { constants } from "crypto";
+import { mapActions } from "vuex";
 
 const config = {
   apiKey: process.env.VUE_APP_FIREBASE_API_KEY,
@@ -198,6 +199,7 @@ export default {
     );
   },
   methods: {
+    ...mapActions(["loadUserToken", "loadUser"]),
     async onSubmit(event) {
       event.preventDefault();
       let response = null
@@ -220,7 +222,7 @@ export default {
         this.loadUser()
 
       } catch (error) {
-        console.log(error.response)
+        console.log(error)
           if(error.response.status == 400){
             this.errors = error.response.data
             console.log('ok')
