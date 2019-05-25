@@ -11,7 +11,7 @@
           <b-nav-item to="/deal-manager" v-if='user != null'>จัดการข้อเสนอ</b-nav-item>
           <b-nav-item :to="{name: 'feedback'}">แจ้งปัญหาการใช้งาน</b-nav-item>
           <b-nav-item :to="{name: 'feedback-list'}" v-if="user != null && user.is_staff">ดูรายงานปัญหาการใช้งาน</b-nav-item>
-          <b-nav-item :to="process.env.VUE_APP_API_ROOT+'/admin/exchange/category/'" v-if="user != null && user.is_staff">เพิ่มหมวดหมู่สินค้า</b-nav-item>
+          <b-nav-item :to="getAPIRoot+'/admin/exchange/category/'" v-if="user != null && user.is_staff">เพิ่มหมวดหมู่สินค้า</b-nav-item>
         </b-navbar-nav>
 
         <b-navbar-nav class="ml-auto right-nav">
@@ -63,6 +63,11 @@ export default {
     },
     openNotificationPane(){
       this.$emit('toggle', 'notification')
+    }
+  },
+  computed: {
+    getAPIRoot() {
+      return process.env.VUE_APP_API_ROOT;
     }
   }
 }
