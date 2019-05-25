@@ -10,8 +10,10 @@
           <b-nav-item to="/">หน้าแรก</b-nav-item>
           <b-nav-item to="/deal-manager" v-if='user != null'>จัดการข้อเสนอ</b-nav-item>
           <b-nav-item :to="{name: 'feedback'}">แจ้งปัญหาการใช้งาน</b-nav-item>
-          <b-nav-item :to="{name: 'feedback-list'}" v-if="user != null && user.is_staff">ดูรายงานปัญหาการใช้งาน</b-nav-item>
-          <b-nav-item :to="getAPIRoot+'/admin/exchange/category/'" v-if="user != null && user.is_staff">เพิ่มหมวดหมู่สินค้า</b-nav-item>
+          <template v-if="user != null && user.is_staff">
+            <b-nav-item :to="{name: 'feedback-list'}">ดูรายงานปัญหาการใช้งาน</b-nav-item>
+            <b-nav-item :to="getAPIRoot+'/admin/exchange/category/'">เพิ่มหมวดหมู่สินค้า</b-nav-item>
+          </template>
         </b-navbar-nav>
 
         <b-navbar-nav class="ml-auto right-nav">
