@@ -123,8 +123,8 @@ export default {
     },
     async deleteProduct(id){
       if(window.confirm("คุณต้องการลบสินค้าชิ้นนี้หรือไม่")){
-        let response = await this.$axios.delete(`/product/${id}`)
-        this.$route.push('/')
+        let response = await this.$axios.delete(`/product/${id}/`)
+        this.$router.push('/')
       }
     }
   }
