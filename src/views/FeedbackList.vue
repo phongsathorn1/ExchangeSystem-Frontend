@@ -7,9 +7,10 @@
     </div>
     <div class="wrapper-container">
         <b-container>
-            <div class="feedback-card" v-for="feedback in feedbacks">
-                <h1>{{ feedback.title }}</h1>
+            <div class="feedback-card" v-for="feedback in feedbacks" :key="feedback.id">
+                <h3>{{ feedback.title }}</h3>
                 <p>{{ feedback.detail }}</p>
+                <footer class="blockquote-footer">วันที่สร้าง {{ feedback.created_date | moment("calendar") }}</footer>
             </div>
         </b-container>
     </div>

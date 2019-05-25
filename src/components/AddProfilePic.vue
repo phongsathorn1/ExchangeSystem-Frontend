@@ -42,9 +42,12 @@ import { mapGetters } from "vuex";
 export default {
   components: { AvatarCropper },
   name: "profile-picture-upload",
+  created(){
+    console.log(this.$axios)
+  },
   data() {
     return {
-      uploadUrl: "http://127.0.0.1:8000/user/me/upload-picture"
+      uploadUrl: `${process.env.VUE_APP_API_ROOT}/user/me/upload-picture`
     };
   },
   methods: {
