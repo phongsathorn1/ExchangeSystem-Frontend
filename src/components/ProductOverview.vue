@@ -30,7 +30,8 @@
           </b-row>
           <b-row v-if="id">
             <div class="product-status" v-if="getUser && owner.id != getUser.id">
-              <span class="product-ready product-status-flag">พร้อมให้ยื่นข้อเสนอ</span>
+              <span class="product-ready product-status-flag" v-if="is_avaliable">พร้อมให้ยื่นข้อเสนอ</span>
+              <span class="product-notready product-status-flag" v-else>ไม่พร้อมให้ยื่นข้อเสนอ</span>
             </div>
           </b-row>
           <b-row>
@@ -96,7 +97,8 @@ export default {
     "wantItem",
     "detail",
     "images",
-    "owner"
+    "owner",
+    "is_avaliable"
   ],
   computed: {
     ...mapGetters(["getUser"]),
@@ -162,6 +164,10 @@ export default {
 
 .product-ready {
   background: #aaf7cc;
+}
+
+.product-notready {
+  background: #D36A6A;
 }
 
 .product-detail-text {

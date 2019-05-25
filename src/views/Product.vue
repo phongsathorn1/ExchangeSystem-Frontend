@@ -17,6 +17,7 @@
           :images="product.product_picture"
           :owner="product.owner"
           :id="product.id"
+          :is_avaliable="product.is_avaliable"
         ></product-overview>
       </b-container>
     </div>
