@@ -16,7 +16,7 @@ Vue.use(vueMoment, { moment })
 
 Vue.prototype.$moment.locale('th')
 Vue.prototype.$axios = axios.create({
-  baseURL: 'http://localhost:8000/'
+  baseURL: process.env.VUE_APP_API_ROOT
 })
 
 const token = localStorage.getItem('user_token')
