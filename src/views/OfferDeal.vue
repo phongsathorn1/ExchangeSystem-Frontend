@@ -68,6 +68,7 @@
                               min="0"
                               value="0"
                               :max="offer_product.quantity"
+                              @input="check_offer_quantity(offer_product)"
                               v-model="data[offer_product.id]"
                               :readonly="disableOfferCount(offer_product.id)"
                             ></b-form-input>
@@ -188,6 +189,14 @@ export default {
     },
     offindex(select) {
       return this.avaliable_offer_products.findIndex(x => x.id == select);
+    },
+    check_offer_quantity(offer_product) {
+      if (this.data[offer_product.id] > offer_product.quantity){
+        this.data[offer_product.id] = offer_product.quantity
+      }
+      else if(this.data[offer_product.id] < 0){
+        this.data[offer_product.id] = 0
+      }
     }
   },
   computed: {
