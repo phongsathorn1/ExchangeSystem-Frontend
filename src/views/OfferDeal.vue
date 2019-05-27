@@ -83,7 +83,7 @@
             </div>
             <!-- end offer-with-block -->
             <div class="offer-with-control">
-              <b-button @click="showPreview">ดำเนินการยื่นคำขอ</b-button>
+              <b-button @click="showPreview" :disabled="!is_enable_preview()">ดำเนินการยื่นคำขอ</b-button>
             </div>
           </b-col>
 
@@ -196,7 +196,20 @@ export default {
       }
       else if(this.data[offer_product.id] < 0){
         this.data[offer_product.id] = 0
+        let index = this.selected.indexOf(offer_product.id)
       }
+    },
+    is_enable_preview() {
+      if(this.selected.length == 0){
+        return false
+      }
+      let is_enable = true
+      this.selected.forEach(element => {
+        if (this.data[element] == 0) {
+          is_enable = false
+        }
+      })
+      return is_enable;
     }
   },
   computed: {
