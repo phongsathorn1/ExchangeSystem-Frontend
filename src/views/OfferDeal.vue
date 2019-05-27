@@ -41,6 +41,7 @@
             <!-- offer-with-block -->
             <div class="offer-with-block">
               <!-- start item-offer-card -->
+              <div v-if="avaliable_offer_products.length < 1">คุณไม่มีสิ่งของที่สามารถแลกเปลี่ยนได้ กรุณาทำการ <router-link :to="{name: 'add_product'}">เพิ่มสินค้า</router-link></div>
               <div
                 class="item-offer-card"
                 v-for="offer_product in avaliable_offer_products"
