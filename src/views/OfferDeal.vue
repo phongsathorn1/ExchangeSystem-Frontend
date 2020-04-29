@@ -125,7 +125,7 @@
 
 <script>
 export default {
-  data() {
+  data () {
     return {
       product: null,
       avaliable_offer_products: null,
@@ -133,96 +133,96 @@ export default {
       previewMode: false,
       data: [],
       errors: []
-    };
+    }
   },
-  mounted() {
-    this.loadOfferProduct();
-    window.addEventListener("scroll", event => {
-      this.scrollY = Math.round(window.scrollY);
-    });
+  mounted () {
+    this.loadOfferProduct()
+    window.addEventListener('scroll', event => {
+      this.scrollY = Math.round(window.scrollY)
+    })
   },
   methods: {
-    showPreview() {
+    showPreview () {
       this.selected.forEach(element => {
-        if (this.data[element] == 0) {
-          let index = this.selected.indexOf(element);
-          this.selected.splice(index, 1);
+        if (this.data[element] === 0) {
+          let index = this.selected.indexOf(element)
+          this.selected.splice(index, 1)
         }
-      });
+      })
 
-      this.previewMode = true;
+      this.previewMode = true
     },
-    goBack() {
-      this.previewMode = false;
+    goBack () {
+      this.previewMode = false
     },
-    async loadOfferProduct() {
+    async loadOfferProduct () {
       let response = await this.$axios.get(
         `/product-offer/${this.$route.params.id}/`
-      );
-      this.product = response.data.product;
-      this.avaliable_offer_products = response.data.avaliable_offer_products;
+      )
+      this.product = response.data.product
+      this.avaliable_offer_products = response.data.avaliable_offer_products
 
       this.avaliable_offer_products.forEach(element => {
-        this.data[element.id] = 0;
-      });
+        this.data[element.id] = 0
+      })
     },
-    disableOfferCount(id) {
-      return this.selected.indexOf(id) < 0;
+    disableOfferCount (id) {
+      return this.selected.indexOf(id) < 0
     },
-    async submit() {
-      let data = [];
+    async submit () {
+      let data = []
       this.selected.forEach(element => {
         data.push({
           id: element,
           quantity: this.data[element]
-        });
-      });
+        })
+      })
 
-      console.log(data);
-      let response = await this.$axios.post("/deal/", {
+      console.log(data)
+      let response = await this.$axios.post('/deal/', {
         product_id: this.product.id,
         offer_products: data
-      });
+      })
 
-      console.log(response);
+      console.log(response)
 
-      this.$router.push({ name: "deal-manager" });
+      this.$router.push({ name: 'deal-manager' })
     },
-    offindex(select) {
-      return this.avaliable_offer_products.findIndex(x => x.id == select);
+    offindex (select) {
+      return this.avaliable_offer_products.findIndex(x => x.id === select)
     },
-    check_offer_quantity(offer_product) {
-      if (this.data[offer_product.id] > offer_product.quantity){
-        this.data[offer_product.id] = offer_product.quantity
+    check_offer_quantity (offerProduct) {
+      if (this.data[offerProduct.id] > offerProduct.quantity) {
+        this.data[offerProduct.id] = offerProduct.quantity
+      } else if (this.data[offerProduct.id] < 0) {
+        this.data[offerProduct.id] = 0
+        // let index = this.selected.indexOf(offerProduct.id)
       }
-      else if(this.data[offer_product.id] < 0){
-        this.data[offer_product.id] = 0
-        let index = this.selected.indexOf(offer_product.id)
-      }
     },
-    is_enable_preview() {
-      if(this.selected.length == 0){
+    is_enable_preview () {
+      if (this.selected.length === 0) {
         return false
       }
-      let is_enable = true
+      let isEnable = true
       this.selected.forEach(element => {
-        if (this.data[element] == 0) {
-          is_enable = false
+        if (this.data[element] === 0) {
+          isEnable = false
         }
       })
-      return is_enable;
+      return isEnable
     }
   },
   computed: {
-    fullname() {
+    fullname () {
       if (this.product.owner) {
         return `${this.product.owner.first_name} ${
           this.product.owner.last_name
-        }`;
+        }`
       }
+      return false
     }
   }
-};
+}
 </script>
 
 <style lang="scss">
