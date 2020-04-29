@@ -146,12 +146,12 @@
 </template>
 
 <script>
-import { VueEditor } from "vue2-editor";
-import vue2Dropzone from "vue2-dropzone";
-import "vue2-dropzone/dist/vue2Dropzone.min.css";
-import { mapGetters } from "vuex";
+import { VueEditor } from 'vue2-editor'
+import vue2Dropzone from 'vue2-dropzone'
+import 'vue2-dropzone/dist/vue2Dropzone.min.css'
+import { mapGetters } from 'vuex'
 
-import ProductOverview from "@/components/ProductOverview.vue";
+import ProductOverview from '@/components/ProductOverview.vue'
 
 export default {
   components: {
@@ -159,14 +159,14 @@ export default {
     ProductOverview,
     vueDropzone: vue2Dropzone
   },
-  data() {
+  data () {
     return {
       form: {
-        title: "",
+        title: '',
         category: null,
         quantity: 1,
-        wantItem: "",
-        detail: "",
+        wantItem: '',
+        detail: '',
         images: []
       },
       media_images: [],
@@ -175,151 +175,151 @@ export default {
       formError: false,
       editor: {
         customToolbar: [
-          ["bold", "italic", "underline", "strike", "link"],
+          ['bold', 'italic', 'underline', 'strike', 'link'],
           [{ header: 1 }, { header: 2 }],
-          [{ list: "ordered" }, { list: "bullet" }],
-          ["blockquote", "align", "direction", "code-block"],
-          ["image", "video"]
+          [{ list: 'ordered' }, { list: 'bullet' }],
+          ['blockquote', 'align', 'direction', 'code-block'],
+          ['image', 'video']
         ]
       },
       imageUploadOption: {
-        url: process.env.VUE_APP_API_ROOT+"/upload/product/",
-        acceptedFiles: "image/*",
-        thumbnailMethod: "contain",
+        url: process.env.VUE_APP_API_ROOT + '/upload/product/',
+        acceptedFiles: 'image/*',
+        thumbnailMethod: 'contain',
         addRemoveLinks: true,
-        thumbnailHeight: "300",
+        thumbnailHeight: '300',
         thumbnailWidth: null,
-        dictDefaultMessage: "คลิกหรือลากไฟล์มาที่นี่เพื่ออัพโหลดรูปภาพ",
-        dictCancelUpload: "หยุดอัพโหลด",
+        dictDefaultMessage: 'คลิกหรือลากไฟล์มาที่นี่เพื่ออัพโหลดรูปภาพ',
+        dictCancelUpload: 'หยุดอัพโหลด',
         dictCancelUploadConfirmation:
-          "คุณแน่ใจแล้วใช่หรือไม่ที่จะหยุดอัพโหลดรูปภาพนี้",
-        dictRemoveFile: "ลบรูปภาพ"
+          'คุณแน่ใจแล้วใช่หรือไม่ที่จะหยุดอัพโหลดรูปภาพนี้',
+        dictRemoveFile: 'ลบรูปภาพ'
       },
       previewMode: false,
       errors: {}
-    };
+    }
   },
-  created() {
-    this.getCategories();
-    this.imageUploadOption["headers"] = {
+  created () {
+    this.getCategories()
+    this.imageUploadOption['headers'] = {
       Authorization: `Bearer ${this.getUserToken}`
-    };
+    }
   },
   methods: {
-    onSubmit() {
-      if (this.form.title == "") {
-        this.errors["title"] = "กรุณากรอกข้อมูล";
+    onSubmit () {
+      if (this.form.title === '') {
+        this.errors['title'] = 'กรุณากรอกข้อมูล'
       }
       if (this.category == null) {
-        this.errors["category"] = "กรุณากรอกข้อมูล";
+        this.errors['category'] = 'กรุณากรอกข้อมูล'
       }
       if (this.wantItem == null) {
-        this.errors["wantItem"] = "กรุณากรอกข้อมูล";
+        this.errors['wantItem'] = 'กรุณากรอกข้อมูล'
       }
       if (this.detail == null) {
-        this.errors["detail"] = "กรุณากรอกข้อมูล";
+        this.errors['detail'] = 'กรุณากรอกข้อมูล'
       }
       if (
-        this.form.title !== "" &&
+        this.form.title !== '' &&
         this.category !== null &&
         this.wantItem !== null &&
         this.detail !== null
       ) {
-        this.previewMode = true;
-        this.formError = false;
+        this.previewMode = true
+        this.formError = false
       } else {
-        this.previewMode = false;
-        this.formError = true;
+        this.previewMode = false
+        this.formError = true
       }
     },
-    isValidate(field) {
+    isValidate (field) {
       if (Object.keys(this.errors).length !== 0) {
         if (this.errors[field]) {
-          return false;
+          return false
         } else {
-          return true;
+          return true
         }
       }
-      return null;
+      return null
     },
-    onClickBack() {
-      this.previewMode = false;
+    onClickBack () {
+      this.previewMode = false
     },
-    onConfirmSubmit() {
-      this.submitProduct();
+    onConfirmSubmit () {
+      this.submitProduct()
       // this.$router.push("/");
     },
-    async getCategories() {
+    async getCategories () {
       try {
-        let response = await this.$axios.get("/category/");
+        let response = await this.$axios.get('/category/')
         let categories = [
           {
-            text: "เลือกหมวดหมู่สินค้า",
+            text: 'เลือกหมวดหมู่สินค้า',
             value: null
           }
-        ];
+        ]
 
         response.data.results.forEach(category => {
           categories.push({
             text: category.name,
             value: category.id
-          });
-        });
+          })
+        })
 
-        this.categories = categories;
+        this.categories = categories
       } catch (error) {
-        console.log(error);
+        console.log(error)
       }
     },
-    async submitProduct() {
+    async submitProduct () {
       try {
-        let response = await this.$axios.post("/product/", {
+        let response = await this.$axios.post('/product/', {
           name: this.form.title,
           category_id: this.form.category,
           detail: this.form.detail,
           quantity: this.form.quantity,
           want_product: this.form.wantItem,
           images_id: this.form.images
-        });
+        })
 
-        console.log(response.data);
+        console.log(response.data)
         this.$router.push({
-          name: "product",
+          name: 'product',
           params: { id: response.data.id }
-        });
+        })
       } catch (error) {
-        console.log(error.response);
+        console.log(error.response)
       }
     },
-    imageUploadSuccess(file, response) {
-      this.form.images.push(response.id);
+    imageUploadSuccess (file, response) {
+      this.form.images.push(response.id)
       this.images_uuid.push({
         file_uid: file.upload.uuid,
         id: response.id
-      });
+      })
       this.media_images.push({
         picture_path: response.picture_path
-      });
-      console.log(response);
+      })
+      console.log(response)
     },
-    imageUploadRemove(file, error, xhr) {
+    imageUploadRemove (file, error, xhr) {
       if (!this.previewMode) {
-        let image_uuid_index = this.images_uuid.findIndex(
-          x => x.file_uid == file.upload.uuid
-        );
-        let image_upload_id = this.form.images.indexOf(
-          this.images_uuid[image_uuid_index].id
-        );
-        this.form.images.splice(image_upload_id, 1);
-        this.images_uuid.splice(image_uuid_index, 1);
-        console.log(file);
+        let imageUUIDindex = this.images_uuid.findIndex(
+          x => x.file_uid === file.upload.uuid
+        )
+        let imageUploadId = this.form.images.indexOf(
+          this.images_uuid[imageUUIDindex].id
+        )
+        this.form.images.splice(imageUploadId, 1)
+        this.images_uuid.splice(imageUUIDindex, 1)
+        console.log(file)
       }
     }
   },
   computed: {
-    ...mapGetters(["getUserToken"])
+    ...mapGetters(['getUserToken'])
   }
-};
+}
 </script>
 
 <style lang="scss" scoped>
@@ -372,4 +372,3 @@ export default {
   background-color: rgba($color: $primary-light-color, $alpha: 0.6);
 }
 </style>
-

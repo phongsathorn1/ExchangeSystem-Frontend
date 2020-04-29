@@ -40,83 +40,83 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+import { mapGetters } from 'vuex'
 
 export default {
-  props: ["show"],
-  data() {
+  props: ['show'],
+  data () {
     return {
       close: true,
       showPane: false,
       notifications: null,
       polling: null
-    };
+    }
   },
-  mounted() {
-    this.loadNotification();
-    this.polling = setInterval(this.loadNotification, 15000);
+  mounted () {
+    this.loadNotification()
+    this.polling = setInterval(this.loadNotification, 15000)
   },
-  beforeDestroy() {
-    clearInterval(this.polling);
+  beforeDestroy () {
+    clearInterval(this.polling)
   },
   methods: {
-    closePane() {
-      this.$emit("close");
-      let self = this;
+    closePane () {
+      this.$emit('close')
+      let self = this
 
-      this.close = true;
-      setTimeout(function() {
-        self.showPane = false;
-      }, 1000);
+      this.close = true
+      setTimeout(function () {
+        self.showPane = false
+      }, 1000)
     },
-    async loadNotification() {
-      let response = await this.$axios.get("/notification/");
-      this.notifications = response.data.results;
-      this.countNotifications();
+    async loadNotification () {
+      let response = await this.$axios.get('/notification/')
+      this.notifications = response.data.results
+      this.countNotifications()
     },
-    countNotifications() {
-      let count = this.notifications.filter(x => !x.is_readed).length;
-      this.$emit("notification-count", count);
-      return count;
+    countNotifications () {
+      let count = this.notifications.filter(x => !x.is_readed).length
+      this.$emit('notification-count', count)
+      return count
     },
-    async handleClick(notificationId) {
-      let response = await this.$axios.post(`/notification/${notificationId}/`);
+    async handleClick (notificationId) {
+      // let response = await this.$axios.post(`/notification/${notificationId}/`)
       this.notifications.forEach(x => {
-        if (x.id == notificationId) {
-          x.is_readed = true;
+        if (x.id === notificationId) {
+          x.is_readed = true
         }
-      });
+      })
       this.closePane()
-      this.$router.push({name: 'deal-manager'})
+      this.$router.push({ name: 'deal-manager' })
     }
   },
   computed: {
-    ...mapGetters(["getUser"]),
-    isHaveNotifications() {
+    ...mapGetters(['getUser']),
+    isHaveNotifications () {
       if (this.notifications.length > 0) {
-        return true;
+        return true
       }
-      return false;
+      return false
     }
   },
   watch: {
-    show() {
-      let self = this;
-      this.loadNotification();
+    show () {
+      let self = this
+      this.loadNotification()
       if (this.show) {
-        this.showPane = this.show;
-        setTimeout(function() {
-          self.close = !self.show;
-        }, 1000);
+        this.showPane = this.show
+        setTimeout(function () {
+          self.close = !self.show
+        }, 1000)
       } else {
-        this.close = !this.show;
-        setTimeout(function() {
-          self.showPane = self.show;
-        }, 1000);
+        this.close = !this.show
+        setTimeout(function () {
+          self.showPane = self.show
+        }, 1000)
       }
     }
   }
-};
+}
 </script>
 
 <style lang="scss">
@@ -221,4 +221,3 @@ export default {
   margin: 0px 5px;
 }
 </style>
-

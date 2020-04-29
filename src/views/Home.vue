@@ -16,11 +16,11 @@
 </template>
 
 <script>
-import ProductItem from "@/components/ProductItem.vue";
-import Search from "@/components/Search.vue";
+import ProductItem from '@/components/ProductItem.vue'
+import Search from '@/components/Search.vue'
 
 export default {
-  name: "home",
+  name: 'home',
   components: {
     ProductItem,
     Search
@@ -32,46 +32,46 @@ export default {
         previous: null,
         lists: []
       }
-    };
+    }
   },
-  mounted() {
-    this.getProducts();
+  mounted () {
+    this.getProducts()
   },
   methods: {
-    async getProducts() {
-      let response;
+    async getProducts () {
+      let response
       if (Object.keys(this.$route.query).length !== 0) {
-        response = await this.$axios.get("/product/", {
+        response = await this.$axios.get('/product/', {
           params: {
             q: this.$route.query.q,
             category: this.$route.query.category
           }
-        });
+        })
       } else {
-        response = await this.$axios.get("/product/");
+        response = await this.$axios.get('/product/')
       }
-      this.products.lists = response.data.results;
-      this.products.next = response.data.next;
-      this.products.previous = response.data.previous;
+      this.products.lists = response.data.results
+      this.products.next = response.data.next
+      this.products.previous = response.data.previous
 
-      console.log(response.data);
+      console.log(response.data)
     }
   },
   computed: {
-    isHasQuery() {
+    isHasQuery () {
       if (Object.keys(this.$route.query).length !== 0) {
-        return true;
+        return true
       }
-      return false;
+      return false
     }
   },
   watch: {
-    isHasQuery() {
+    isHasQuery () {
       console.log('change')
-      this.getProducts();
+      this.getProducts()
     }
   }
-};
+}
 </script>
 
 <style lang="scss">

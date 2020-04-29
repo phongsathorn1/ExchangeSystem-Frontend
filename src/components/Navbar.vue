@@ -52,27 +52,26 @@ export default {
     ...mapGetters({
       user: 'getUser'
     }),
-    getAPIRoot() {
-      return process.env.VUE_APP_API_ROOT;
+    getAPIRoot () {
+      return process.env.VUE_APP_API_ROOT
     }
   },
   methods: {
     ...mapActions({
       logOut: 'logOut'
     }),
-    signOut(){
+    signOut () {
       this.logOut()
       this.$emit('logout')
-      this.$router.push({name: 'home'})
-      location.reload();
+      this.$router.push({ name: 'home' })
+      location.reload()
     },
-    openNotificationPane(){
+    openNotificationPane () {
       this.$emit('toggle', 'notification')
     }
   }
 }
 </script>
-
 
 <style lang="scss">
 @import "@/assets/custom.scss";

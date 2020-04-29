@@ -21,12 +21,11 @@
 import LoginBox from '@/components/LoginBox.vue'
 
 export default {
-    components:{
-        LoginBox
-    }
+  components: {
+    LoginBox
+  }
 }
 </script>
-
 
 <style lang="scss" scoped>
 #signin{

@@ -36,12 +36,10 @@
           </b-row>
           <b-row>
             <b-col sm="6">
-              <b>หมวดหมู่</b>
-              ​ {{ category.name }}
+              <b>หมวดหมู่</b>{{ category.name }}
             </b-col>
             <b-col sm="6">
-              <b>จำนวนที่มี</b>
-              ​ {{ quantity }}
+              <b>จำนวนที่มี</b>{{ quantity }}
             </b-col>
           </b-row>
           <b-row>
@@ -69,17 +67,17 @@
 </template>
 
 <script>
-import Slick from "vue-slick";
-import "@/../node_modules/slick-carousel/slick/slick.css";
-import "@/../node_modules/slick-carousel/slick/slick-theme.css";
-import { mapGetters } from "vuex";
+import Slick from 'vue-slick'
+import '@/../node_modules/slick-carousel/slick/slick.css'
+import '@/../node_modules/slick-carousel/slick/slick-theme.css'
+import { mapGetters } from 'vuex'
 
 export default {
-  name: "product-overview",
+  name: 'product-overview',
   components: {
     Slick
   },
-  data() {
+  data () {
     return {
       slickOptions: {
         arrows: true,
@@ -87,48 +85,52 @@ export default {
         draggable: true,
         infinite: false
       }
-    };
+    }
   },
   props: [
-    "id",
-    "title",
-    "category",
-    "quantity",
-    "wantItem",
-    "detail",
-    "images",
-    "owner",
-    "is_avaliable"
+    'id',
+    'title',
+    'category',
+    'quantity',
+    'wantItem',
+    'detail',
+    'images',
+    'owner',
+    'is_avaliable'
   ],
   computed: {
-    ...mapGetters(["getUser"]),
-    fullName() {
+    ...mapGetters(['getUser']),
+    fullName () {
       if (this.owner) {
-        return this.owner.first_name + " " + this.owner.last_name;
+        return this.owner.first_name + ' ' + this.owner.last_name
       }
-      return "";
+      return ''
     }
   },
   methods: {
-    hasImages() {
-      console.log(this.images);
+    hasImages () {
+      console.log(this.images)
       if (this.images == null) {
-        return false;
+        return false
       } else {
         if (this.images.length > 0) {
-          return true;
+          return true
         }
       }
-      return false;
+      return false
     },
-    async deleteProduct(id){
-      if(window.confirm("คุณต้องการลบสินค้าชิ้นนี้หรือไม่")){
-        let response = await this.$axios.delete(`/product/${id}/`)
-        this.$router.push('/')
+    async deleteProduct (id) {
+      if (window.confirm('คุณต้องการลบสินค้าชิ้นนี้หรือไม่')) {
+        try {
+          await this.$axios.delete(`/product/${id}/`)
+          this.$router.push('/')
+        } catch (error) {
+          console.log(error)
+        }
       }
     }
   }
-};
+}
 </script>
 
 <style lang="scss" scoped>

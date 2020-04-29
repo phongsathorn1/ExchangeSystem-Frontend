@@ -19,20 +19,20 @@
 
 <script>
 export default {
-    data(){
-        return {
-            feedbacks: []
-        }
-    },
-    mounted(){
-        this.loadFeedback()
-    },
-    methods:{
-        async loadFeedback(){
-            let response = await this.$axios.get('/feedback/')
-            this.feedbacks = response.data.results
-        }
+  data () {
+    return {
+      feedbacks: []
     }
+  },
+  mounted () {
+    this.loadFeedback()
+  },
+  methods: {
+    async loadFeedback () {
+      let response = await this.$axios.get('/feedback/')
+      this.feedbacks = response.data.results
+    }
+  }
 }
 </script>
 
@@ -42,4 +42,3 @@ export default {
     padding: 20px;
 }
 </style>
-

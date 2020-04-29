@@ -28,45 +28,45 @@
 </template>
 
 <script>
-import StarRating from "vue-star-rating";
+import StarRating from 'vue-star-rating'
 
 export default {
-  props: ["value"],
+  props: ['value'],
   components: {
     StarRating
   },
-  data() {
+  data () {
     return {
       scoreForm: this.value,
       modalShow: false,
       hoverScore: null
-    };
+    }
   },
   methods: {
-    handleRating() {
-      this.$emit("input", this.scoreForm);
+    handleRating () {
+      this.$emit('input', this.scoreForm)
     },
-    handleOk() {
-      this.$emit("ok", this.scoreForm);
+    handleOk () {
+      this.$emit('ok', this.scoreForm)
     }
   },
   watch: {
-    modalShow() {
+    modalShow () {
       if (!this.modalShow) {
-        this.scoreForm.dealId = null;
-        this.scoreForm.score = null;
+        this.scoreForm.dealId = null
+        this.scoreForm.score = null
       }
     }
   },
   computed: {
-      previewScore(){
-          if(this.scoreForm.score){
-              return this.scoreForm.score
-          }
-          return 'ยังไม่ได้ระบุคะแนน'
+    previewScore () {
+      if (this.scoreForm.score) {
+        return this.scoreForm.score
       }
+      return 'ยังไม่ได้ระบุคะแนน'
+    }
   }
-};
+}
 </script>
 
 <style lang="scss">

@@ -139,10 +139,10 @@
 </template>
 
 <script>
-import firebase from "firebase";
-import axios from "axios";
-import { constants } from "crypto";
-import { mapActions } from "vuex";
+import firebase from 'firebase'
+// import axios from 'axios'
+// import { constants } from 'crypto'
+import { mapActions } from 'vuex'
 
 const config = {
   apiKey: process.env.VUE_APP_FIREBASE_API_KEY,
@@ -151,61 +151,61 @@ const config = {
   projectId: process.env.VUE_APP_FIREBASE_PROJECT_ID,
   storageBucket: process.env.VUE_APP_FIREBASE_STORAGE_BUCKET,
   messagingSenderId: process.env.VUE_APP_FIREBASE_MESSAGINGSENDERID
-};
+}
 
-firebase.initializeApp(config);
+firebase.initializeApp(config)
 
 export default {
-  data() {
+  data () {
     return {
       form: {
-        firstname: "",
-        lastname: "",
+        firstname: '',
+        lastname: '',
         gender: null,
-        email: "",
-        phone: "",
-        otp: "",
+        email: '',
+        phone: '',
+        otp: '',
         birthday: null,
-        password: "",
-        password_confirmation: "",
-        firebase_uid: ""
+        password: '',
+        password_confirmation: '',
+        firebase_uid: ''
       },
       gender: [
-          { text: "กรุณาระบุเพศ", value: null }, 
-          { text: "ชาย", value: 'F' }, 
-          { text: "หญิง", value: 'M' }, 
-          { text: "อื่นๆ", value: 'X' }, 
-        ],
+        { text: 'กรุณาระบุเพศ', value: null },
+        { text: 'ชาย', value: 'F' },
+        { text: 'หญิง', value: 'M' },
+        { text: 'อื่นๆ', value: 'X' }
+      ],
       showOTP: false,
       waitingOTP: false,
       validatingOTP: false,
       otpError: null,
       errors: {
-        
+
       }
-    };
+    }
   },
-  mounted() {
-    firebase.auth().languageCode = "th";
+  mounted () {
+    firebase.auth().languageCode = 'th'
     window.recaptchaVerifier = new firebase.auth.RecaptchaVerifier(
-      "recaptcha-container",
+      'recaptcha-container',
       {
-        size: "invisible",
-        callback: function(response) {
+        size: 'invisible',
+        callback: function (response) {
           // reCAPTCHA solved, allow signInWithPhoneNumber.
-          this.onRequestOTP();
+          this.onRequestOTP()
         }
       }
-    );
+    )
   },
   methods: {
-    ...mapActions(["loadUserToken", "loadUser"]),
-    async onSubmit(event) {
-      event.preventDefault();
+    ...mapActions(['loadUserToken', 'loadUser']),
+    async onSubmit (event) {
+      event.preventDefault()
       let response = null
 
       try {
-        response = await this.$axios.post("/user/register/", {
+        response = await this.$axios.post('/user/register/', {
           email: this.form.email,
           first_name: this.form.firstname,
           last_name: this.form.lastname,
@@ -214,109 +214,107 @@ export default {
           firebase_uid: this.form.firebase_uid,
           gender: this.form.gender,
           birthday: this.form.birthday
-        });
+        })
 
         this.$store.commit('setUserToken', response.data.token)
         this.$store.commit('setUser', response.data)
         this.$emit('submit', self.form)
         this.loadUser()
-
       } catch (error) {
         console.log(error)
-          if(error.response.status == 400){
-            this.errors = error.response.data
-            console.log('ok')
-          }
+        if (error.response.status === 400) {
+          this.errors = error.response.data
+          console.log('ok')
+        }
       }
     },
-    onRequestOTP() {
-      let appVerifier = window.recaptchaVerifier;
-      let self = this;
+    onRequestOTP () {
+      let appVerifier = window.recaptchaVerifier
+      let self = this
       this.waitingOTP = true
       firebase
         .auth()
         .signInWithPhoneNumber(this.phoneWithCountryCode, appVerifier)
-        .then(function(confirmationResult) {
-          window.confirmationResult = confirmationResult;
-          console.log(confirmationResult);
-          self.showOTP = true;
+        .then(function (confirmationResult) {
+          window.confirmationResult = confirmationResult
+          console.log(confirmationResult)
+          self.showOTP = true
           self.waitingOTP = false
         })
-        .catch(function(error) {
+        .catch(function (error) {
           // Error; SMS not sent
-          console.log(error);
-          grecaptcha.reset(window.recaptchaWidgetId);
+          console.log(error)
+          grecaptcha.reset(window.recaptchaWidgetId)
           //   window.recaptchaVerifier.render().then(function(widgetId) {
           //     grecaptcha.reset(widgetId);
           //   });
-        });
+        })
     },
-    async onConfirmOTP() {
+    async onConfirmOTP () {
       this.validatingOTP = true
-      try{
+      try {
         var credential = firebase.auth.PhoneAuthProvider.credential(
           confirmationResult.verificationId,
           this.form.otp
         )
-        await firebase.auth().signInAndRetrieveDataWithCredential(credential);
-        this.form.firebase_uid = firebase.auth().currentUser.uid;
-        console.log(credential);
-        console.log(firebase.auth().currentUser.uid);
+        await firebase.auth().signInAndRetrieveDataWithCredential(credential)
+        this.form.firebase_uid = firebase.auth().currentUser.uid
+        console.log(credential)
+        console.log(firebase.auth().currentUser.uid)
         this.otpError = false
-      }
-      catch (error) {
+      } catch (error) {
         this.otpError = true
       }
       this.validatingOTP = false
     },
-    otpValidate(){
-      if(this.otpError){
+    otpValidate () {
+      if (this.otpError) {
         return false
       }
-      if(this.form.firebase_uid !== ''){
+      if (this.form.firebase_uid !== '') {
         return true
       }
       return null
     },
-    isValidate(field){
-      if(Object.keys(this.errors).length !== 0){
-        if(this.errors[field]){
+    isValidate (field) {
+      if (Object.keys(this.errors).length !== 0) {
+        if (this.errors[field]) {
           return false
-        }else{
+        } else {
           return true
         }
       }
       return null
     },
-    passwordValidate(){
-      if(this.form.password != '' && this.form.password_confirmation != ''){
+    passwordValidate () {
+      if (this.form.password !== '' && this.form.password_confirmation !== '') {
         return this.form.password_confirmation === this.form.password
       }
     }
   },
   computed: {
-    phoneWithCountryCode: function() {
-      let phoneNumber = this.form.phone;
-      let countryCode = "+66";
+    phoneWithCountryCode: function () {
+      let phoneNumber = this.form.phone
+      let countryCode = '+66'
 
-      if (phoneNumber[0] == "0") {
-        phoneNumber = phoneNumber.slice(1, phoneNumber.length);
+      if (phoneNumber[0] === '0') {
+        phoneNumber = phoneNumber.slice(1, phoneNumber.length)
       }
 
-      return countryCode + phoneNumber;
+      return countryCode + phoneNumber
       // return this.form.phone
     },
-    phoneWithZeroPrepare: function() {
-      let phoneNumber = this.form.phone;
+    phoneWithZeroPrepare: function () {
+      let phoneNumber = this.form.phone
 
-      if (phoneNumber[0] != "0") {
-        phoneNumber = "0" + phoneNumber;
+      if (phoneNumber[0] !== '0') {
+        phoneNumber = '0' + phoneNumber
       }
 
-      return phoneNumber;
+      return phoneNumber
     }
   }
-};
+}
 </script>
 
 <style lang="scss" scoped>

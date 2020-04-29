@@ -3,46 +3,46 @@
 </template>
 
 <script>
-import Quill from "quill";
+import Quill from 'quill'
 
 export default {
-  name: "editor",
+  name: 'editor',
   props: {
     value: {
       type: String,
-      default: ""
+      default: ''
     }
   },
-  data() {
+  data () {
     return {
       editor: null
-    };
+    }
   },
-  mounted() {
+  mounted () {
     this.editor = new Quill(this.$refs.editor, {
       modules: {
         toolbar: [
           [{ header: [1, 2, 3, 4, false] }],
-          ["bold", "italic", "underline"]
+          ['bold', 'italic', 'underline']
         ]
       },
-      theme: "bubble",
-      formats: ["bold", "underline", "header", "italic"]
-    });
+      theme: 'bubble',
+      formats: ['bold', 'underline', 'header', 'italic']
+    })
 
-    this.editor.root.innerHTML = this.value;
+    this.editor.root.innerHTML = this.value
 
-    this.editor.on("text-change", () => this.update());
+    this.editor.on('text-change', () => this.update())
   },
   methods: {
-    update() {
+    update () {
       this.$emit(
-        "input",
-        this.editor.getText() ? this.editor.root.innerHTML : ""
-      );
+        'input',
+        this.editor.getText() ? this.editor.root.innerHTML : ''
+      )
     }
   }
-};
+}
 </script>
 
 <style lang="scss" scoped>

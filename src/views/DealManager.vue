@@ -188,17 +188,17 @@
 </template>
 
 <script>
-import WaitingStatus from "@/components/WaitingStatus.vue";
-import StarRating from "vue-star-rating";
-import ScoreModal from "@/components/ScoreModal.vue";
+import WaitingStatus from '@/components/WaitingStatus.vue'
+// import StarRating from 'vue-star-rating'
+import ScoreModal from '@/components/ScoreModal.vue'
 
 export default {
   components: {
     WaitingStatus,
-    StarRating,
+    // StarRating,
     ScoreModal
   },
-  data() {
+  data () {
     return {
       datas: null,
       polling: null,
@@ -207,101 +207,101 @@ export default {
         score: null
       },
       modalShow: false
-    };
+    }
   },
-  mounted() {
-    this.loadProduct();
+  mounted () {
+    this.loadProduct()
   },
-  created() {
-    this.polling = setInterval(this.loadProduct, 10000);
+  created () {
+    this.polling = setInterval(this.loadProduct, 10000)
   },
-  beforeDestroy() {
-    clearInterval(this.polling);
+  beforeDestroy () {
+    clearInterval(this.polling)
   },
   methods: {
-    async loadProduct() {
-      let response = await this.$axios.get("/deal/");
-      this.datas = response.data;
+    async loadProduct () {
+      let response = await this.$axios.get('/deal/')
+      this.datas = response.data
     },
-    async ownerAccept(deal) {
-      let response = await this.$axios.post(`deal/accept/${deal.id}/`);
+    async ownerAccept (deal) {
+      let response = await this.$axios.post(`deal/accept/${deal.id}/`)
 
       if (this.findDealIndexInOffersDeal(deal) != null) {
-        let index = this.findDealIndexInOffersDeal(deal);
-        console.log(index);
+        let index = this.findDealIndexInOffersDeal(deal)
+        console.log(index)
         this.datas[index[0]].offer_deals[index[1]].offerer_accept =
-          response.data.offerer_accept;
+          response.data.offerer_accept
         this.datas[index[0]].offer_deals[index[1]].owner_accept =
-          response.data.owner_accept;
+          response.data.owner_accept
       } else if (this.findDealIndexInRecievesDeal(deal) != null) {
-        let index = this.findDealIndexInRecievesDeal(deal);
-        console.log(index);
+        let index = this.findDealIndexInRecievesDeal(deal)
+        console.log(index)
         this.datas[index[0]].receive_deals[index[1]].offerer_accept =
-          response.data.offerer_accept;
+          response.data.offerer_accept
         this.datas[index[0]].receive_deals[index[1]].owner_accept =
-          response.data.owner_accept;
+          response.data.owner_accept
       } else {
-        console.log("not find");
+        console.log('not find')
       }
     },
 
-    findDealIndexInOffersDeal(deal) {
+    findDealIndexInOffersDeal (deal) {
       for (let i = 0; i < this.datas.length; i++) {
-        console.log(this.datas[i]);
+        console.log(this.datas[i])
         for (let j = 0; j < this.datas[i].offer_deals.length; j++) {
-          console.log(this.datas[i].offer_deals[j].id);
-          if (this.datas[i].offer_deals[j].id == deal.id) {
-            return [i, j];
+          console.log(this.datas[i].offer_deals[j].id)
+          if (this.datas[i].offer_deals[j].id === deal.id) {
+            return [i, j]
           }
         }
       }
-      return null;
+      return null
     },
-    findDealIndexInRecievesDeal(deal) {
+    findDealIndexInRecievesDeal (deal) {
       for (let i = 0; i < this.datas.length; i++) {
-        console.log(this.datas[i]);
+        console.log(this.datas[i])
         for (let j = 0; j < this.datas[i].receive_deals.length; j++) {
-          console.log(this.datas[i].receive_deals[j].id);
-          if (this.datas[i].receive_deals[j].id == deal.id) {
-            return [i, j];
+          console.log(this.datas[i].receive_deals[j].id)
+          if (this.datas[i].receive_deals[j].id === deal.id) {
+            return [i, j]
           }
         }
       }
-      return null;
+      return null
     },
 
-    setScoreForm(dealId) {
-      this.scoreForm.dealId = dealId;
+    setScoreForm (dealId) {
+      this.scoreForm.dealId = dealId
     },
 
-    async cancelDeal(deal){
+    async cancelDeal (deal) {
       let response = await this.$axios.delete(`deal/${deal.id}/`)
       console.log(response)
       this.loadProduct()
     },
 
-    async handleOk(deal) {
+    async handleOk (deal) {
       let response = await this.$axios.post(`deal/${deal.dealId}/score/`, {
         score: this.scoreForm.score
-      });
+      })
       this.loadProduct()
-      console.log(response);
+      console.log(response)
     },
 
-    openChat(deal) {
+    openChat (deal) {
       console.log(deal)
-      let myWindow = window.open(`/chat/${deal.id}/`, "", "width=500,height=800");
+      window.open(`/chat/${deal.id}/`, '', 'width=500,height=800')
     }
   },
   watch: {
-    modalShow() {
+    modalShow () {
       if (!this.modalShow) {
-        this.scoreForm.dealId = null;
-        this.scoreForm.score = null;
+        this.scoreForm.dealId = null
+        this.scoreForm.score = null
       }
     }
   }
-};
+}
 </script>
 
 <style lang="scss">

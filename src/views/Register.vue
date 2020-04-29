@@ -21,31 +21,30 @@
 </template>
 
 <script>
-import RegisterBox from "@/components/RegisterBox.vue";
-import AddProfilePic from "@/components/AddProfilePic.vue";
+import RegisterBox from '@/components/RegisterBox.vue'
+import AddProfilePic from '@/components/AddProfilePic.vue'
 
 export default {
   components: {
     RegisterBox,
     AddProfilePic
   },
-  data() {
+  data () {
     return {
       step: 1,
       imageUploaded: false
-    };
+    }
   },
   methods: {
-    onRegisterSubmit() {
-      this.step++;
+    onRegisterSubmit () {
+      this.step++
     },
-    handleUploaded() {
-      this.imageUploaded = true;
+    handleUploaded () {
+      this.imageUploaded = true
     }
   }
-};
+}
 </script>
-
 
 <style lang="scss">
 #register {

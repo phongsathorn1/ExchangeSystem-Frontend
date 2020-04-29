@@ -11,11 +11,10 @@
 
 <script>
 export default {
-    name: 'waiting-status'
+  name: 'waiting-status'
 }
 </script>
 
 <style lang="scss" scoped>
 
 </style>
-

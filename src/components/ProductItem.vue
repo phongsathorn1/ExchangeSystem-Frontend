@@ -25,9 +25,9 @@
 
 <script>
 export default {
-  name: "product-item",
-  props: ["product"]
-};
+  name: 'product-item',
+  props: ['product']
+}
 </script>
 
 <style lang="scss" scoped>

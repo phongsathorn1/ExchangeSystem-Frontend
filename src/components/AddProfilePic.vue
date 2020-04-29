@@ -36,37 +36,36 @@
 </template>
 
 <script>
-import AvatarCropper from "vue-avatar-cropper";
-import { mapGetters } from "vuex";
+import AvatarCropper from 'vue-avatar-cropper'
+import { mapGetters } from 'vuex'
 
 export default {
   components: { AvatarCropper },
-  name: "profile-picture-upload",
-  created(){
+  name: 'profile-picture-upload',
+  created () {
     console.log(this.$axios)
   },
-  data() {
+  data () {
     return {
       uploadUrl: `${process.env.VUE_APP_API_ROOT}/user/me/upload-picture`
-    };
+    }
   },
   methods: {
-    launchFilePicker() {
+    launchFilePicker () {
       this.$refs.filebtn.click()
     },
-    handleUploaded(response) {
-      if (response.status == "success") {
-        this.$store.dispatch("setUserAvatar", response.user.picture)
+    handleUploaded (response) {
+      if (response.status === 'success') {
+        this.$store.dispatch('setUserAvatar', response.user.picture)
         this.$emit('uploaded')
       }
     }
   },
   computed: {
-    ...mapGetters(["getUserToken", "getUser"])
+    ...mapGetters(['getUserToken', 'getUser'])
   }
-};
+}
 </script>
-
 
 <style lang="scss" scoped>
 @import "@/assets/custom.scss";

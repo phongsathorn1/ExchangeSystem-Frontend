@@ -71,28 +71,28 @@ export default {
   components: {
     ProductItem
   },
-  data() {
+  data () {
     return {
-      profileImage: require("@/assets/images/profile.jpg"),
+      profileImage: require('@/assets/images/profile.jpg'),
       profileProp: {
         height: 300,
         width: 300
       },
       data: null
-    };
+    }
   },
-  created() {
+  created () {
     this.loadProfile()
   },
   methods: {
-    async loadProfile() {
+    async loadProfile () {
       let response = null
-      if(Object.keys(this.$route.params).length !== 0){
+      if (Object.keys(this.$route.params).length !== 0) {
         console.log('0')
         response = await this.$axios.get(`/user/profile/${this.$route.params.id}/`)
         this.data = response.data
-      }else{
-        if(this.getUser){
+      } else {
+        if (this.getUser) {
           response = await this.$axios.get(`/user/profile/${this.getUser.id}/`)
           this.data = response.data
         }
@@ -103,29 +103,29 @@ export default {
     ...mapGetters([
       'getUser'
     ]),
-    fullname: function() {
+    fullname: function () {
       return `${this.data.profile.first_name} ${this.data.profile.last_name}`
     },
-    productCount: function() {
+    productCount: function () {
       return this.data.avaliable_products.length
     },
-    scorePercent: function() {
-      if(this.data.score){
+    scorePercent: function () {
+      if (this.data.score) {
         return `${this.data.score * 100}%`
       }
       return 'ไม่สามารถคำนวณคะแนนได้'
     }
   },
-  watch:{
-    async getUser(){
-      if(Object.keys(this.$route.params).length === 0){
+  watch: {
+    async getUser () {
+      if (Object.keys(this.$route.params).length === 0) {
         console.log('1')
         let response = await this.$axios.get(`/user/profile/${this.getUser.id}/`)
         this.data = response.data
       }
     }
   }
-};
+}
 </script>
 
 <style lang="scss">

@@ -25,15 +25,15 @@
 </template>
 
 <script>
-import ProductItem from "@/components/ProductItem.vue";
-import Search from "@/components/Search.vue";
-import ProductOverview from "@/components/ProductOverview.vue";
+// import ProductItem from '@/components/ProductItem.vue'
+import Search from '@/components/Search.vue'
+import ProductOverview from '@/components/ProductOverview.vue'
 
 export default {
-  props: ["id"],
-  name: "product",
+  props: ['id'],
+  name: 'product',
   components: {
-    ProductItem,
+    // ProductItem,
     Search,
     ProductOverview
   },
@@ -41,37 +41,37 @@ export default {
     return {
       product: {
         category: {
-          id: "",
-          name: ""
+          id: '',
+          name: ''
         },
-        detail: "",
-        id: "",
-        name: "",
+        detail: '',
+        id: '',
+        name: '',
         owner: null,
-        quantity: "",
-        url: "",
-        wantItem: "",
+        quantity: '',
+        url: '',
+        wantItem: '',
         product_picture: []
       }
-    };
+    }
   },
-  mounted() {
-    this.getProduct();
+  mounted () {
+    this.getProduct()
   },
   methods: {
-    async getProduct() {
+    async getProduct () {
       try {
         let response = await this.$axios.get(
           `/product/${this.$route.params.id}/`
-        );
-        this.product = response.data;
-        console.log(response.data);
+        )
+        this.product = response.data
+        console.log(response.data)
       } catch (error) {
-        console.log(error);
+        console.log(error)
       }
     }
   }
-};
+}
 </script>
 
 <style lang="scss">

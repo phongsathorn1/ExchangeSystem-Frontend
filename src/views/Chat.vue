@@ -82,35 +82,35 @@
 
 <script>
 export default {
-  data() {
+  data () {
     return {
       chats: null,
       polling: null,
-      message: "",
-    };
+      message: ''
+    }
   },
-  mounted() {
-    this.loadChats();
-    this.polling = setInterval(this.loadChats, 5000);
+  mounted () {
+    this.loadChats()
+    this.polling = setInterval(this.loadChats, 5000)
   },
   methods: {
-    async loadChats() {
-      this.scrollToBottom();
-      let response = await this.$axios.get(`/chat/${this.$route.params.id}/`);
-      this.chats = response.data;
-      this.scrollToBottom();
+    async loadChats () {
+      this.scrollToBottom()
+      let response = await this.$axios.get(`/chat/${this.$route.params.id}/`)
+      this.chats = response.data
+      this.scrollToBottom()
     },
-    async sendChat() {
+    async sendChat () {
       let response = await this.$axios.post(`/chat/${this.$route.params.id}/`, {
         message: this.message
-      });
-      this.loadChats();
-      this.message = "";
-      console.log(response);
+      })
+      this.loadChats()
+      this.message = ''
+      console.log(response)
     },
-    scrollToBottom() {
-      this.$refs.mainchat.scrollTop = this.$refs.mainchat.scrollHeight;
+    scrollToBottom () {
+      this.$refs.mainchat.scrollTop = this.$refs.mainchat.scrollHeight
     }
   }
-};
+}
 </script>

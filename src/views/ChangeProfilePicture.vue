@@ -15,15 +15,15 @@
 </template>
 
 <script>
-import RegisterBox from "@/components/RegisterBox.vue";
-import AddProfilePic from "@/components/AddProfilePic.vue";
+// import RegisterBox from '@/components/RegisterBox.vue'
+import AddProfilePic from '@/components/AddProfilePic.vue'
 
 export default {
   components: {
-    RegisterBox,
+    // RegisterBox,
     AddProfilePic
   }
-};
+}
 </script>
 
 <style lang="scss">

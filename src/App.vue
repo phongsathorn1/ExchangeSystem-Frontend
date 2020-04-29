@@ -14,62 +14,61 @@
 </template>
 
 <script>
-import Navbar from "@/components/Navbar.vue";
-import NotificationPane from "@/components/NotificationPane.vue";
-import { mapGetters, mapActions } from "vuex";
-import axios from "axios";
+import Navbar from '@/components/Navbar.vue'
+import NotificationPane from '@/components/NotificationPane.vue'
+import { mapGetters, mapActions } from 'vuex'
+// import axios from 'axios'
 
 export default {
   components: {
     Navbar,
     NotificationPane
   },
-  data() {
+  data () {
     return {
       showNotification: false,
       notiCount: 0,
       modalShow: false,
-      modalMsg: ""
-    };
+      modalMsg: ''
+    }
   },
-  created() {
-    this.loadUserToken();
-    this.loadUser();
+  created () {
+    this.loadUserToken()
+    this.loadUser()
   },
   methods: {
-    ...mapActions(["loadUserToken", "loadUser"]),
-    handleToggle(element) {
-      if (element == "notification") {
-        this.showNotification = !this.showNotification;
+    ...mapActions(['loadUserToken', 'loadUser']),
+    handleToggle (element) {
+      if (element === 'notification') {
+        this.showNotification = !this.showNotification
       }
     },
-    updateNotiCount(value) {
-      this.notiCount = value;
+    updateNotiCount (value) {
+      this.notiCount = value
     },
-    handleLogout() {
-      this.showModal("ออกจากระบบสำเร็จ");
+    handleLogout () {
+      this.showModal('ออกจากระบบสำเร็จ')
     },
-    showModal(message) {
-      this.modalShow = true;
-      this.modalMsg = message;
+    showModal (message) {
+      this.modalShow = true
+      this.modalMsg = message
 
       let self = this
 
-      setTimeout(function() {
-        self.modalShow = false;
-        self.modalMsg = "";
-      }, 3000);
+      setTimeout(function () {
+        self.modalShow = false
+        self.modalMsg = ''
+      }, 3000)
     }
   },
   computed: {
     ...mapGetters({
-      user: "getUser",
-      userToken: "getUserToken"
+      user: 'getUser',
+      userToken: 'getUserToken'
     })
   }
-};
+}
 </script>
-
 
 <style lang="scss">
 @import "assets/custom.scss";

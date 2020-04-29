@@ -44,54 +44,53 @@
 
 <script>
 export default {
-  name: "search",
-  data() {
+  name: 'search',
+  data () {
     return {
       form: {
-        search: "",
+        search: '',
         category: null
       },
       categories: [
-        { text: "ทั้งหมด", value: null },
-        "รูปภาพ",
-        "เข็มกลัด",
-        "แท่งไฟ"
+        { text: 'ทั้งหมด', value: null },
+        'รูปภาพ',
+        'เข็มกลัด',
+        'แท่งไฟ'
       ]
-    };
+    }
   },
-  mounted() {
-    this.loadCategories();
+  mounted () {
+    this.loadCategories()
     if (Object.keys(this.$route.query).length !== 0) {
-      this.form.search = this.$route.query.q;
-      this.form.category = this.$route.query.category;
+      this.form.search = this.$route.query.q
+      this.form.category = this.$route.query.category
     }
   },
   methods: {
-    async loadCategories() {
-      let response = await this.$axios.get("/category/");
-      this.categories = [{ text: "ทั้งหมด", value: null }];
+    async loadCategories () {
+      let response = await this.$axios.get('/category/')
+      this.categories = [{ text: 'ทั้งหมด', value: null }]
       response.data.results.forEach(x => {
-        this.categories.push(x.name);
-      });
+        this.categories.push(x.name)
+      })
     }
   },
   computed: {
-    isShowTitle() {
+    isShowTitle () {
       if (Object.keys(this.$route.query).length !== 0) {
-        return true;
+        return true
       }
-      return false;
+      return false
     }
   },
   watch: {
-    isShowTitle() {
+    isShowTitle () {
       this.form.search = ''
       this.form.category = null
     }
   }
-};
+}
 </script>
-
 
 <style lang="scss">
 @import "@/assets/custom.scss";

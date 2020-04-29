@@ -25,54 +25,52 @@
 </template>
 
 <script>
-import axios from "axios";
-import { mapGetters, mapActions } from "vuex";
+import { mapGetters, mapActions } from 'vuex'
 
 export default {
-  data() {
+  data () {
     return {
-      email: "",
-      password: "",
+      email: '',
+      password: '',
       errors: {}
-    };
+    }
   },
   methods: {
-    ...mapActions(["loadUser"]),
-    async onSubmit(event) {
-      event.preventDefault();
+    ...mapActions(['loadUser']),
+    async onSubmit (event) {
+      event.preventDefault()
       try {
-        let response = await this.$axios.post("/user/auth/", {
+        let response = await this.$axios.post('/user/auth/', {
           email: this.email,
           password: this.password
-        });
-        this.$store.commit("setUserToken", response.data.token);
-        await this.loadUser();
+        })
+        this.$store.commit('setUserToken', response.data.token)
+        await this.loadUser()
 
-        this.$router.push({ name: "home" });
+        this.$router.push({ name: 'home' })
       } catch (error) {
-        this.errors = error.response.data;
+        this.errors = error.response.data
       }
     },
-    isValidate(field) {
+    isValidate (field) {
       if (Object.keys(this.errors).length !== 0) {
         if (this.errors['non_field_errors']) {
           return null
         }
         if (this.errors[field]) {
-          return false;
+          return false
         } else {
-          return true;
+          return true
         }
       }
-      return null;
+      return null
     }
   },
   computed: {
-    ...mapGetters(["getUserToken"])
+    ...mapGetters(['getUserToken'])
   }
-};
+}
 </script>
-
 
 <style lang="scss" scoped>
 @import "@/assets/custom.scss";

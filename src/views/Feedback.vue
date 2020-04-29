@@ -51,52 +51,52 @@
 
 <script>
 export default {
-  data() {
+  data () {
     return {
       form: {
-        title: "",
-        detail: ""
+        title: '',
+        detail: ''
       },
       modalShow: false,
-      modalMsg: "",
+      modalMsg: '',
       errors: {}
-    };
+    }
   },
   methods: {
-    async onSubmit() {
-      try{
-        let response = await this.$axios.post("/feedback/", {
+    async onSubmit () {
+      try {
+        await this.$axios.post('/feedback/', {
           title: this.form.title,
           detail: this.form.detail
-        });
-        this.showModal("ส่งข้อมูลเรียบร้อยแล้ว ขอบคุณที่แจ้งปัญหาในการใช้งานระบบ");
-      } catch(error) {
+        })
+        this.showModal('ส่งข้อมูลเรียบร้อยแล้ว ขอบคุณที่แจ้งปัญหาในการใช้งานระบบ')
+      } catch (error) {
         this.errors = error.response.data
       }
     },
-    showModal(message) {
-      this.modalShow = true;
-      this.modalMsg = message;
+    showModal (message) {
+      this.modalShow = true
+      this.modalMsg = message
 
       let self = this
 
-      setTimeout(function() {
-        self.modalShow = false;
-        self.modalMsg = "";
-      }, 3000);
+      setTimeout(function () {
+        self.modalShow = false
+        self.modalMsg = ''
+      }, 3000)
     },
-    isValidate(field){
-      if(Object.keys(this.errors).length !== 0){
-        if(this.errors[field]){
+    isValidate (field) {
+      if (Object.keys(this.errors).length !== 0) {
+        if (this.errors[field]) {
           return false
-        }else{
+        } else {
           return true
         }
       }
       return null
     }
   }
-};
+}
 </script>
 
 <style lang="scss">
