@@ -5,7 +5,8 @@
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
-    "lint": "vue-cli-service lint"
+    "lint": "vue-cli-service lint",
+    "deploy": "vue-cli-service s3-deploy"
   },
   "dependencies": {
     "axios": "^0.18.0",
@@ -21,13 +22,15 @@
     "sass-loader": "^7.1.0",
     "vue": "^2.6.6",
     "vue-avatar-cropper": "^1.0.5",
+    "vue-cli-plugin-s3-deploy": "^4.0.0-rc3",
     "vue-moment": "^4.0.0",
     "vue-router": "^3.0.1",
     "vue-slick": "^1.1.15",
     "vue-star-rating": "^1.6.1",
     "vue2-dropzone": "^3.5.9",
     "vue2-editor": "^2.6.6",
-    "vuex": "^3.0.1"
+    "vuex": "^3.0.1",
+    "webpack-s3-plugin": "^1.0.3"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "^3.5.0",
@@ -35,6 +38,7 @@
     "@vue/cli-service": "^3.5.0",
     "@vue/eslint-config-standard": "^4.0.0",
     "babel-eslint": "^10.0.1",
+    "compression-webpack-plugin": "^3.1.0",
     "eslint": "^5.8.0",
     "eslint-plugin-vue": "^5.0.0",
     "vue-template-compiler": "^2.5.21"
