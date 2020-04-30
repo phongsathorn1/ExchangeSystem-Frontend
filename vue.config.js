@@ -36,14 +36,14 @@ module.exports = {
   },
   pluginOptions: {
     s3Deploy: {
-      bucket: 'exchange.com',
+      bucket: 'exchangethinks',
       staticHosting: true,
       cacheControl: 'max-age=86400',
       gzip: true,
       registry: undefined,
-      awsProfile: 'default',
+      awsProfile: 'django',
       overrideEndpoint: false,
-      region: 'us-east-1',
+      region: 'ap-southeast-1',
       createBucket: false,
       staticIndexPage: 'index.html',
       staticErrorPage: 'index.html',
