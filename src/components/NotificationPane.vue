@@ -70,9 +70,11 @@ export default {
       }, 1000)
     },
     async loadNotification () {
-      let response = await this.$axios.get('/notification/')
-      this.notifications = response.data.results
-      this.countNotifications()
+      if (this.loadUser) {
+        let response = await this.$axios.get('/notification/')
+        this.notifications = response.data.results
+        this.countNotifications()
+      }
     },
     countNotifications () {
       let count = this.notifications.filter(x => !x.is_readed).length
